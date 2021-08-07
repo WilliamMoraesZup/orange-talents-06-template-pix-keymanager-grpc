@@ -50,6 +50,8 @@ dependencies {
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    implementation("javax.annotation:javax.annotation-api") //Add a provider like Hibernate Validator (RI)
+    implementation("org.hibernate:hibernate-validator:5.2.4.Final") // Add CPFValidator
 }
 
 
