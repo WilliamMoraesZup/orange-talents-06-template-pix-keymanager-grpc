@@ -22,14 +22,14 @@ class NovaChavePixEndPoint(
         val novaChave: NovaChavePixRequest = request.toModel();
 
 
-        val chavePixSalvaNoBanco = service.registraChavePix(novaChave)
+    val chavePixSalvaNoBanco = service.registraChavePix(novaChave)
 
 
-        responseObserver.onNext(
-            CadastraChavePixResponse.newBuilder()
-                .setPixId(chavePixSalvaNoBanco.id.toString())
-                .setClienteId(novaChave.idCliente.toString()).build()
-        )
+       responseObserver.onNext(
+         CadastraChavePixResponse.newBuilder()
+               .setPixId("123")
+               .setClienteId( "12333").build()
+     )
         responseObserver.onCompleted()
     }
 
