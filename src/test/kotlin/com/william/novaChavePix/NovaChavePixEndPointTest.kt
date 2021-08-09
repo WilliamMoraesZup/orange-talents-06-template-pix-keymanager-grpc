@@ -9,6 +9,7 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import javax.inject.Singleton
 
@@ -19,17 +20,17 @@ internal class NovaChavePixEndPointTest(val grpcClient: ChavePixServiceGrpc.Chav
 
     @Test
     fun `Deve criar um novo objeto no banco`() {
-        val pixResponse =
+        val model =
             CadastraChavePixRequest.newBuilder()
                 .setIdCliente("123")
                 .setTipoDaChave(TipoDaChave.CPF)
                 .setValorChave("41911390880")
                 .setTipoDaConta(TipoDaConta.CONTA_CORRENTE)
                 .build()
-    val registra = grpcClient.registra(pixResponse)
-       println(registra)
+        val pixResponse = grpcClient.registra(model)
+        println(pixResponse)
 
-        //   assertNotNull(pixResponse.pixId)
+        assertNotNull(pixResponse.pixId)
 
     }
 
