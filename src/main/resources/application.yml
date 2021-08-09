@@ -3,9 +3,7 @@ micronaut:
   application:
     name: keyManager
 
-grpc:
-  server:
-    port: ${SERVER_PORT:50051}
+#
 
 datasources:
   default:
