@@ -13,7 +13,7 @@ import javax.validation.constraints.Size
 
 @ValidTipoChave
 @Introspected
-class NovaChavePixRequest
+data class NovaChavePixRequest
     (
     @ValidUUID @field:NotBlank val idCliente: String?,
     @field:NotNull val tipoDaChave: TipoDaChaveENUM?,

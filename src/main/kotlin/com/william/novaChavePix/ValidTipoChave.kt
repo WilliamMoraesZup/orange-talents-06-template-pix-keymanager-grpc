@@ -22,14 +22,14 @@ class ValidPixKeyValidator : javax.validation.ConstraintValidator<ValidTipoChave
 
     override fun isValid(value: NovaChavePixRequest?, context: javax.validation.ConstraintValidatorContext): Boolean {
 
-        // must be validated with @NotNull
         if (value?.tipoDaChave == null) {
             return true
         }
 
         val valid = value.tipoDaChave.valida(value.valorChave)
         if (!valid) {
-            // https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-custom-property-paths
+
+
             context.disableDefaultConstraintViolation()
             context
                 .buildConstraintViolationWithTemplate(context.defaultConstraintMessageTemplate) // or "chave Pix inválida (${value.tipo})"

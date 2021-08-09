@@ -8,7 +8,7 @@ import com.william.shared.ErrorHandler
 import io.grpc.stub.StreamObserver
 import javax.inject.Singleton
 
-@ErrorHandler
+//@ErrorHandler
 @Singleton
 class NovaChavePixEndPoint(
     val service: NovaChavePixService
@@ -22,7 +22,7 @@ class NovaChavePixEndPoint(
         val novaChave: NovaChavePixRequest = request.toModel();
 
 
-    val chavePixSalvaNoBanco = service.registraChavePix(novaChave)
+     val chavePixSalvaNoBanco = service.registraChavePix(novaChave , responseObserver)
 
 
        responseObserver.onNext(

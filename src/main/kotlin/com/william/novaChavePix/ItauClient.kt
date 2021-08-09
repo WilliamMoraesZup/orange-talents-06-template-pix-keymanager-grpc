@@ -8,10 +8,10 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 
 
-@Client("http://localhost:9091/api/v1/")
+@Client("\${endereco.client.itau}")
 interface ItauClient {
 
-    @Get("clientes/{id}/contas")
+    @Get("/api/v1/clientes/{id}/contas")
     fun consultaConta(
         @PathVariable id: String,
         @QueryValue tipo: TipoDaConta

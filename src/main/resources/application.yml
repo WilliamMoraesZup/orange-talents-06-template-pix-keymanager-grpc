@@ -1,6 +1,12 @@
+
 micronaut:
   application:
-    name: keymanagerGrpc
+    name: keyManager
+
+grpc:
+  server:
+    port: ${SERVER_PORT:50051}
+
 datasources:
   default:
     url: jdbc:postgresql://localhost:5432/keymanager
@@ -11,6 +17,9 @@ datasources:
     dialect: POSTGRES
 jpa.default.properties.hibernate.hbm2ddl.auto: update
 
+
+# http cliente
+endereco.client.itau: ${ITAU_URL:`http://localhost:9091`}
 
 jpa:
   default:
@@ -23,3 +32,5 @@ jpa:
           lob:
             non_contextual_creation: true
           database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+erro.valorChaveJaExiste: Essa chave já existe no Sistema
