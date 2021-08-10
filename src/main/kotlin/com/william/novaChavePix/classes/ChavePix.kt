@@ -21,12 +21,12 @@ class ChavePix(
     val tipoDaChave: TipoDaChave,
 
     @field:NotBlank
-//    @Column(nullable = false, unique = true)
-    @Size(max = 77) var valorChave: String,
+    @Column(nullable = false, unique = true)
+    @field:Size(max = 77) var valorChave: String,
 
     @field:NotNull
     @Enumerated(EnumType.STRING)
-   // @Column(nullable = false)
+    @Column(nullable = false)
     val tipoDaConta: TipoDaConta,
 
     @field:Valid

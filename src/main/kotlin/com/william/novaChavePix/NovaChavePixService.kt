@@ -33,19 +33,21 @@ class NovaChavePixService(
                     .withDescription("\${erro.clienteNaoExiste}")
                     .asRuntimeException()
             )
-
+            responseObserver.onCompleted()
             throw ErroCustomizado("\${erro.clienteNaoExiste}")
-
         }
+
+
         if (repository.existsByValorChave(novaChavePixRequest.valorChave!!)) {
             responseObserver.onError(
                 Status.ALREADY_EXISTS
                     .withDescription("\${erro.valorChaveJaExiste}")
                     .asRuntimeException()
             )
-
+            responseObserver.onCompleted()
             throw ErroCustomizado("\${erro.valorChaveJaExiste}")
         }
+
 
         val contaAssociada = respostaConta.body()?.toModel()
 

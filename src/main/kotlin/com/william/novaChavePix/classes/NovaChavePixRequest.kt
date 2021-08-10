@@ -17,14 +17,16 @@ data class NovaChavePixRequest
     (
     @field:ValidUUID @field:NotBlank val idCliente: String?,
     @field:NotNull val tipoDaChave: TipoDaChaveENUM?,
-    @field:NotBlank @Size(max = 77) val valorChave: String?,
+ @field:Size(
+        message = "O valor da chave deve conter no máximo 77 caracteres",
+        max = 77
+    ) val valorChave: String?,
     @field:NotNull val tipoDaConta: TipoDaConta?
 ) {
 
     fun toModel(contaAssociada: ContaAssociada): ChavePix {
 
         return ChavePix(
-//            idCliente = UUID.fromString(this.idCliente),
             idCliente = this.idCliente,
             tipoDaChave = TipoDaChave.valueOf(this.tipoDaChave!!.name),
             valorChave = if (this.tipoDaChave == TipoDaChaveENUM.CHAVE_ALEATORIA) UUID.randomUUID()

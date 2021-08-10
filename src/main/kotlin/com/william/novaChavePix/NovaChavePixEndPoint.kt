@@ -4,34 +4,50 @@ import com.william.CadastraChavePixRequest
 import com.william.CadastraChavePixResponse
 import com.william.ChavePixServiceGrpc
 import com.william.novaChavePix.classes.NovaChavePixRequest
+import com.william.shared.ErroCustomizado
+import io.grpc.Status
 import io.grpc.stub.StreamObserver
-import io.micronaut.validation.Validated
 import javax.inject.Inject
 import javax.inject.Singleton
-import javax.validation.Valid
+import javax.validation.ConstraintViolationException
 
-//@ErrorHandler
+
 @Singleton
 class NovaChavePixEndPoint(
     @Inject private val service: NovaChavePixService
 ) : ChavePixServiceGrpc.ChavePixServiceImplBase() {
 
     override fun registra(
-    request: CadastraChavePixRequest,
+        request: CadastraChavePixRequest,
         responseObserver: StreamObserver<CadastraChavePixResponse>
     ) {
 
-        val novaChave: NovaChavePixRequest = request.toModel();
+        try {
+            val novaChave: NovaChavePixRequest = request.toModel()
+            val chavePixSalvaNoBanco = service.registraChavePix(novaChave, responseObserver)
 
-        val chavePixSalvaNoBanco = service.registraChavePix(novaChave, responseObserver)
+            responseObserver.onNext(
+                CadastraChavePixResponse.newBuilder()
+                    .setPixId(chavePixSalvaNoBanco.id.toString())
+                    .setClienteId(chavePixSalvaNoBanco.idCliente).build()
+            )
 
-        responseObserver.onNext(
-            CadastraChavePixResponse.newBuilder()
-                .setPixId(chavePixSalvaNoBanco.id.toString())
-                .setClienteId(chavePixSalvaNoBanco.idCliente).build()
-        )
-        responseObserver.onCompleted()
+
+        } catch (erro: ErroCustomizado) {
+            responseObserver.onError(
+                Status.INVALID_ARGUMENT
+                    .withDescription(erro.message)
+                    .asRuntimeException()
+            )
+
+
+        } catch (erro: ConstraintViolationException) {
+            responseObserver.onError(
+                Status.INVALID_ARGUMENT
+                    .withDescription(erro.message)
+                    .asRuntimeException()
+            )
+        }
+
     }
-
-
 }

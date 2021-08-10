@@ -57,7 +57,7 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("io.micronaut.test:micronaut-test-junit5:2.3.7")
-  //  testImplementation("org.mockito:mockito-core:3.8.0")
+    testImplementation("org.mockito:mockito-core:3.8.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     testImplementation("com.h2database:h2")
 
@@ -66,9 +66,6 @@ dependencies {
 
 }
 
-//test {
-//    useJUnitPlatform()
-//}
 
 application {
     mainClass.set("com.william.ApplicationKt")

@@ -1,21 +1,23 @@
 package com.william.novaChavePix
 
-import io.micronaut.validation.validator.constraints.EmailValidator
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
 
 enum class TipoDaChaveENUM {
 
     CPF {
         override fun valida(chave: String?): Boolean {
-            println("VALIDANDO CPF ${chave}")
+
             if (chave.isNullOrBlank()) {
                 return false
 
             }
+
             if (!chave.matches("^[0-9]{11}\$".toRegex())) {
-                return false;
+                return false
 
             }
+
             return CPFValidator().run {
                 initialize(null)
                 isValid(chave, null)
@@ -26,9 +28,9 @@ enum class TipoDaChaveENUM {
         override fun valida(chave: String?): Boolean {
             if (chave.isNullOrBlank()) {
                 return false
-
             }
-            return (!chave.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex()))
+
+            return (chave.matches("^\\+[1-9][0-9]\\d{1,14}\$".toRegex()))
         }
     },
 
@@ -39,15 +41,19 @@ enum class TipoDaChaveENUM {
 
     EMAIL {
         override fun valida(chave: String?): Boolean {
-            if (chave.isNullOrBlank()) {
-                return false
 
+            if (chave.isNullOrBlank()) {
+                println("NULL OU BLACK")
+                return false
             }
+
             return EmailValidator().run {
                 initialize(null)
                 isValid(chave, null)
             }
         }
+
+
     };
 
 
