@@ -4,32 +4,32 @@ import com.william.CadastraChavePixRequest
 import com.william.CadastraChavePixResponse
 import com.william.ChavePixServiceGrpc
 import com.william.novaChavePix.classes.NovaChavePixRequest
-import com.william.shared.ErrorHandler
 import io.grpc.stub.StreamObserver
+import io.micronaut.validation.Validated
+import javax.inject.Inject
 import javax.inject.Singleton
+import javax.validation.Valid
 
 //@ErrorHandler
 @Singleton
 class NovaChavePixEndPoint(
-    val service: NovaChavePixService
+    @Inject private val service: NovaChavePixService
 ) : ChavePixServiceGrpc.ChavePixServiceImplBase() {
 
     override fun registra(
-        request: CadastraChavePixRequest,
+    request: CadastraChavePixRequest,
         responseObserver: StreamObserver<CadastraChavePixResponse>
     ) {
 
         val novaChave: NovaChavePixRequest = request.toModel();
 
+        val chavePixSalvaNoBanco = service.registraChavePix(novaChave, responseObserver)
 
-     val chavePixSalvaNoBanco = service.registraChavePix(novaChave , responseObserver)
-
-
-       responseObserver.onNext(
-         CadastraChavePixResponse.newBuilder()
-               .setPixId("123")
-               .setClienteId( "12333").build()
-     )
+        responseObserver.onNext(
+            CadastraChavePixResponse.newBuilder()
+                .setPixId(chavePixSalvaNoBanco.id.toString())
+                .setClienteId(chavePixSalvaNoBanco.idCliente).build()
+        )
         responseObserver.onCompleted()
     }
 

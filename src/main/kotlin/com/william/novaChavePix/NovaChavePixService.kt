@@ -23,9 +23,9 @@ class NovaChavePixService(
         @Valid novaChavePixRequest: NovaChavePixRequest,
         responseObserver: StreamObserver<CadastraChavePixResponse>
     ): ChavePix {
-        println("CHeguei")
+
         val respostaConta = client.consultaConta(novaChavePixRequest.idCliente!!, novaChavePixRequest.tipoDaConta!!)
-        println(respostaConta.body())
+
 
         if (respostaConta.body() == null) {
             responseObserver.onError(
@@ -34,9 +34,9 @@ class NovaChavePixService(
                     .asRuntimeException()
             )
 
-            throw ErroCustomizado("O Cliente nao foi encontrado no sistema")
+            throw ErroCustomizado("\${erro.clienteNaoExiste}")
+
         }
-        println("buscando")
         if (repository.existsByValorChave(novaChavePixRequest.valorChave!!)) {
             responseObserver.onError(
                 Status.ALREADY_EXISTS
@@ -44,7 +44,7 @@ class NovaChavePixService(
                     .asRuntimeException()
             )
 
-            throw ErroCustomizado("A chave informada já existe")
+            throw ErroCustomizado("\${erro.valorChaveJaExiste}")
         }
 
         val contaAssociada = respostaConta.body()?.toModel()

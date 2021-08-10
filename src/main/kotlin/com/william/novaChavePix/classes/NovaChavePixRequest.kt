@@ -15,7 +15,7 @@ import javax.validation.constraints.Size
 @Introspected
 data class NovaChavePixRequest
     (
-    @ValidUUID @field:NotBlank val idCliente: String?,
+    @field:ValidUUID @field:NotBlank val idCliente: String?,
     @field:NotNull val tipoDaChave: TipoDaChaveENUM?,
     @field:NotBlank @Size(max = 77) val valorChave: String?,
     @field:NotNull val tipoDaConta: TipoDaConta?

@@ -7,8 +7,7 @@ enum class TipoDaChaveENUM {
 
     CPF {
         override fun valida(chave: String?): Boolean {
-
-
+            println("VALIDANDO CPF ${chave}")
             if (chave.isNullOrBlank()) {
                 return false
 
