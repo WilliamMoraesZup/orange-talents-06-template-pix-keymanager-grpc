@@ -1,7 +1,6 @@
 package com.william.novaChavePix
 
 import com.william.novaChavePix.classes.NovaChavePixRequest
-import com.william.shared.ErroCustomizado
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext
@@ -38,9 +37,9 @@ class ValidPixKeyValidator : ConstraintValidator<ValidTipoChave, NovaChavePixReq
 
 
         val ehValido = value.tipoDaChave.valida(value.valorChave)
-        if (ehValido == false) {
-            throw ErroCustomizado("O campo ${value.tipoDaChave} está inválido")
-        }
+//        if (ehValido == false) {
+//            throw ErroCustomizado("O campo ${value.tipoDaChave} está inválido")
+//        }
 
         return ehValido
     }

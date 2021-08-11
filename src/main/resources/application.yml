@@ -31,4 +31,4 @@ jpa:
             non_contextual_creation: true
           database-platform: org.hibernate.dialect.PostgreSQL9Dialect
 
-erro.valorChaveJaExiste: Essa chave já existe no Sistema ${novaChavePixRequest.valorChave}
+erro.valorChaveJaExiste: Essa chave já existe no Sistema `${novaChavePixRequest.valorChave}`
