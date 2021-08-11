@@ -3,8 +3,6 @@ package com.william.novaChavePix
 import com.william.TipoDaConta
 import com.william.novaChavePix.classes.NovaChavePixRequest
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.client.HttpClient
-import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Test
@@ -26,9 +24,6 @@ internal class NovaChavePixEndPointTestMockito() {
     @Inject
     lateinit var clienteItau: ItauClient
 
-//    @field:Inject
-//    @field:Client("/")
-//    lateinit var client: HttpClient
 
     @Test
     fun `Deve retornar pixId e ClienteId`() {
@@ -58,13 +53,5 @@ internal class NovaChavePixEndPointTestMockito() {
 
     }
 
-//    @Factory
-//    class Clients {
-//        @Singleton
-//        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
-//                ChavePixServiceGrpc.ChavePixServiceBlockingStub? {
-//            return ChavePixServiceGrpc.newBlockingStub(channel)
-//        }
-//    }
 
 }
