@@ -1,14 +1,13 @@
 syntax = "proto3";
-
 option java_multiple_files = true;
 option java_package = "com.william";
 option java_outer_classname = "ChavePixOuterClassName";
-
 package com.william;
 
 service ChavePixService {
 
   rpc registra(CadastraChavePixRequest) returns (CadastraChavePixResponse) {}
+  rpc remove(RemoveChavePixRequest)returns (EmptyReturn) {}
 }
 
 enum TipoDaChave {
@@ -39,3 +38,8 @@ message CadastraChavePixResponse {
 
 }
 
+message RemoveChavePixRequest{
+  string pixId = 1;
+  string clienteId = 2;
+}
+message EmptyReturn{}

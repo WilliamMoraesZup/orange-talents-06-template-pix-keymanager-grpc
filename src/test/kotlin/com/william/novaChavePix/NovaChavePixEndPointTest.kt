@@ -12,13 +12,11 @@ import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
-import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito
 import java.util.*
 import javax.inject.Singleton
 
@@ -35,7 +33,6 @@ internal class NovaChavePixEndPointTest(
         repository.deleteAll()
 
     }
-
 
 
     @Test
@@ -184,6 +181,7 @@ internal class NovaChavePixEndPointTest(
             )
         }
 
+        println(erro)
         with(erro) {
             assertEquals(Status.INVALID_ARGUMENT.code, status.code)
             assertEquals("O campo EMAIL está inválido", status.description)

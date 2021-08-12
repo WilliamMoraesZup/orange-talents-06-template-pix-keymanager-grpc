@@ -1,9 +1,7 @@
-
 micronaut:
   application:
     name: keyManager
 
-#
 
 datasources:
   default:
@@ -19,6 +17,11 @@ jpa.default.properties.hibernate.hbm2ddl.auto: update
 # http cliente
 endereco.client.itau: ${ITAU_URL:`http://localhost:9091`}
 
+
+# mensagem erro
+erro.valorChaveJaExiste: "Essa chave já existe no Sistema"
+erro.clienteNaoExiste: ${cliente_nao_existe:`O cliente nao foi encontrado no sistema do ITAU`}
+
 jpa:
   default:
     properties:
@@ -31,4 +34,3 @@ jpa:
             non_contextual_creation: true
           database-platform: org.hibernate.dialect.PostgreSQL9Dialect
 
-erro.valorChaveJaExiste: Essa chave já existe no Sistema `${novaChavePixRequest.valorChave}`

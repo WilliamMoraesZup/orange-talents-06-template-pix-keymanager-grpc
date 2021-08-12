@@ -12,13 +12,13 @@ import javax.inject.Singleton
 import javax.transaction.Transactional
 import javax.validation.Valid
 
-@Validated
+
 @Singleton
+@Validated
 class NovaChavePixService(
     val client: ItauClient,
     val repository: ChavePixRepository
 ) {
-
 
     private val LOGGER = LoggerFactory.getLogger(this::class.java)
 
@@ -31,16 +31,16 @@ class NovaChavePixService(
 
         val respostaConta = client.consultaConta(novaChavePixRequest.idCliente!!, novaChavePixRequest.tipoDaConta!!)
 
-        LOGGER.info("[SERVICE] Cliente chamado $respostaConta")
+        LOGGER.info("[SERVICE] Cliente chamou ${respostaConta.body()}")
 
         if (respostaConta.body() == null) {
-            LOGGER.info("[SERVICE] Pelo jeito a resposta veio nula, chamando response OnError")
+            LOGGER.info("[SERVICE] Pelo jeito o cliente nao existe, chamando response OnError")
             responseObserver.onError(
                 Status.NOT_FOUND
-                    .withDescription("\${erro.clienteNaoExiste}")
+                    .withDescription("{erro.clienteNaoExiste}")
                     .asRuntimeException()
             )
-
+            responseObserver.onCompleted()
             LOGGER.info("[SERVICE] Lançando ErroCustomizado")
 
             throw ErroCustomizado("\${erro.clienteNaoExiste}")
@@ -52,13 +52,13 @@ class NovaChavePixService(
 
             responseObserver.onError(
                 Status.ALREADY_EXISTS
-                    .withDescription("\${erro.valorChaveJaExiste}")
+                    .withDescription("{erro.valorChaveJaExiste}")
                     .asRuntimeException()
             )
-
+            responseObserver.onCompleted()
             LOGGER.info("[SERVICE] Lancando ErroCustomizado valorChaveJaExiste")
-
             throw ErroCustomizado("\${erro.valorChaveJaExiste}")
+
         }
 
         LOGGER.info("[SERVICE] Passou pelos IFS, fazendo o conta associada")

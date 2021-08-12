@@ -1,8 +1,11 @@
 package com.william.novaChavePix
 
 import com.william.CadastraChavePixRequest
+import com.william.RemoveChavePixRequest
 import com.william.TipoDaChave
 import com.william.TipoDaConta
+import com.william.deletaChavePix.ExistsPixId
+import com.william.deletaChavePix.RemoveChaveRequestDTO
 import com.william.novaChavePix.classes.NovaChavePixRequest
 
 fun CadastraChavePixRequest.toModel(): NovaChavePixRequest {
@@ -18,5 +21,10 @@ fun CadastraChavePixRequest.toModel(): NovaChavePixRequest {
             else -> TipoDaConta.valueOf(tipoDaConta.name)
         }
     )
+}
+
+fun RemoveChavePixRequest.toModel(): RemoveChaveRequestDTO {
+    return RemoveChaveRequestDTO( pixId, clienteId)
+
 }
 

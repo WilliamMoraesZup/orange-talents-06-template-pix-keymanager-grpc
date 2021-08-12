@@ -26,33 +26,34 @@ class NovaChavePixEndPoint(
     ) {
 
         try {
-            LOGGER.info("passando NovaChavePixRequest para toModel")
-            val novaChave: NovaChavePixRequest = request.toModel()
+        LOGGER.info("passando NovaChavePixRequest para toModel")
+        val novaChave: NovaChavePixRequest = request.toModel()
 
-            LOGGER.info("Sucesso, chamando service para salvar chave pix")
-            val chavePixSalvaNoBanco = service.registraChavePix(novaChave, responseObserver)
+        LOGGER.info("Sucesso, chamando service para salvar chave pix")
+        val chavePixSalvaNoBanco = service.registraChavePix(novaChave, responseObserver)
 
-            LOGGER.info("Sucesso, chamando retorno do OnNext")
-            responseObserver.onNext(
-                CadastraChavePixResponse.newBuilder()
-                    .setPixId(chavePixSalvaNoBanco.id.toString())
-                    .setClienteId(chavePixSalvaNoBanco.idCliente).build()
-            )
-            LOGGER.info("Chamando onCompleted")
-            responseObserver.onCompleted()
-            LOGGER.info("onCompleted")
+        LOGGER.info("Sucesso, chamando retorno do OnNext")
+        responseObserver.onNext(
+        CadastraChavePixResponse.newBuilder()
+        .setPixId(chavePixSalvaNoBanco.id.toString())
+        .setClienteId(chavePixSalvaNoBanco.idCliente).build()
+        )
+        responseObserver.onCompleted()
+        LOGGER.info("onCompleted")
+        }
 
+        catch (erro: ErroCustomizado) {
+        LOGGER.info("Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
+        responseObserver.onError(
+        Status.INVALID_ARGUMENT
+        .withDescription(erro.message)
+        .asRuntimeException()
+        )
 
-        } catch (erro: ErroCustomizado) {
-            LOGGER.info("Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
-            responseObserver.onError(
-                Status.INVALID_ARGUMENT
-                    .withDescription(erro.message)
-                    .asRuntimeException()
-            )
-            LOGGER.info("PASSEI pelo Catch ERRO CUSTOMIZADO")
+        LOGGER.info("Sobrevivi pelo Catch ERRO CUSTOMIZADO")
+        }
 
-        } catch (erro: ConstraintViolationException) {
+        catch (erro: ConstraintViolationException) {
             LOGGER.info("Putz, caiu no ConstraintViolationException, Status.INVALID_ARGUMENT")
             responseObserver.onError(
                 Status.INVALID_ARGUMENT
@@ -61,9 +62,8 @@ class NovaChavePixEndPoint(
             )
             LOGGER.info("Chamei INVALID")
         }
+
         LOGGER.info("PASSEI dos CATCHS ERRO e CONSTRAINT")
-
-
 
     }
 }

@@ -17,7 +17,7 @@ data class NovaChavePixRequest
     (
     @field:ValidUUID @field:NotBlank val idCliente: String?,
     @field:NotNull val tipoDaChave: TipoDaChaveENUM?,
- @field:Size(
+    @field:Size(
         message = "O valor da chave deve conter no máximo 77 caracteres",
         max = 77
     ) val valorChave: String?,

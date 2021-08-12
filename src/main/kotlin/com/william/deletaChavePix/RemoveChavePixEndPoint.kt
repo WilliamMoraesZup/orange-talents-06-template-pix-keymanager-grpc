@@ -1,0 +1,30 @@
+package com.william.deletaChavePix
+
+import com.william.ChavePixServiceGrpc
+import com.william.EmptyReturn
+import com.william.RemoveChavePixRequest
+import com.william.novaChavePix.toModel
+import io.grpc.stub.StreamObserver
+import javax.inject.Inject
+import javax.inject.Singleton
+
+
+@Singleton
+class RemoveChavePixEndPoint(
+    @Inject private val service: RemoveChaveService
+) : ChavePixServiceGrpc.ChavePixServiceImplBase(
+
+) {
+
+
+    override fun remove(request: RemoveChavePixRequest, responseObserver: StreamObserver<EmptyReturn>) {
+
+     val removeChavePix = service.removeChavePix(request.toModel(), responseObserver)
+        println("Chamando on completed")
+        responseObserver.onCompleted()
+
+
+    }
+
+
+}

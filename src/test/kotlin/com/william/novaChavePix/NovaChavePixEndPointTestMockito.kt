@@ -1,21 +1,12 @@
 package com.william.novaChavePix
 
-import com.william.TipoDaConta
-import com.william.novaChavePix.classes.NovaChavePixRequest
-import io.micronaut.http.HttpResponse
-import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import java.util.*
-import javax.inject.Inject
 
 
 @MicronautTest(transactional = false)
 internal class NovaChavePixEndPointTestMockito() {
 
-
+/*
     @MockBean(ItauClient::class)
     fun enderecoMock(): ItauClient {
         return Mockito.mock(ItauClient::class.java)
@@ -53,6 +44,6 @@ internal class NovaChavePixEndPointTestMockito() {
 
 
     }
-
+*/
 
 }

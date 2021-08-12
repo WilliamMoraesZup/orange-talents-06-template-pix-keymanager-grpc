@@ -12,12 +12,10 @@ enum class TipoDaChaveENUM {
                 return false
 
             }
-
             if (!chave.matches("^[0-9]{11}\$".toRegex())) {
                 return false
 
             }
-
             return CPFValidator().run {
                 initialize(null)
                 isValid(chave, null)
@@ -43,7 +41,7 @@ enum class TipoDaChaveENUM {
         override fun valida(chave: String?): Boolean {
 
             if (chave.isNullOrBlank()) {
-                println("NULL OU BLACK")
+
                 return false
             }
 
