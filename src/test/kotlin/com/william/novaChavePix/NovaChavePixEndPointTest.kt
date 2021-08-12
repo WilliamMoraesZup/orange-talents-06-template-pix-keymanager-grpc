@@ -26,14 +26,10 @@ internal class NovaChavePixEndPointTest(
     val grpcClient: ChavePixServiceGrpc.ChavePixServiceBlockingStub,
     val repository: ChavePixRepository
 ) {
-
-
     @BeforeEach
     fun setup() {
         repository.deleteAll()
-
     }
-
 
     @Test
     fun `Deve criar um novo objeto no banco quando CPF for valido`() {
@@ -122,7 +118,7 @@ internal class NovaChavePixEndPointTest(
 
         with(erro) {
             assertEquals(Status.ALREADY_EXISTS.code, status.code)
-            assertEquals("\${erro.valorChaveJaExiste}", status.description)
+            assertEquals("{erro.valorChaveJaExiste}", status.description)
             assertTrue(repository.findByValorChave(valorChave).size == 1)
         }
 
@@ -145,7 +141,7 @@ internal class NovaChavePixEndPointTest(
 
         with(erro) {
             assertEquals(Status.NOT_FOUND.code, status.code)
-            assertEquals("\${erro.clienteNaoExiste}", status.description)
+            assertEquals("{erro.clienteNaoExiste}", status.description)
         }
     }
 
@@ -263,11 +259,12 @@ internal class NovaChavePixEndPointTest(
 
 }
 
+
 @Factory
-class Clients {
+class RegistraChaveClient {
     @Singleton
     fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
-            ChavePixServiceGrpc.ChavePixServiceBlockingStub? {
+            ChavePixServiceGrpc.ChavePixServiceBlockingStub {
         return ChavePixServiceGrpc.newBlockingStub(channel)
     }
 }

@@ -17,9 +17,9 @@ class RemoveChavePixEndPoint(
 ) {
 
 
-    override fun remove(request: RemoveChavePixRequest, responseObserver: StreamObserver<EmptyReturn>) {
-
-     val removeChavePix = service.removeChavePix(request.toModel(), responseObserver)
+     override fun remove(request: RemoveChavePixRequest, responseObserver: StreamObserver<EmptyReturn>) {
+        println("[RemoveChavePixEndPoint] Chamando on completed")
+        val removeChavePix = service.removeChavePix(request.toModel(), responseObserver)
         println("Chamando on completed")
         responseObserver.onCompleted()
 

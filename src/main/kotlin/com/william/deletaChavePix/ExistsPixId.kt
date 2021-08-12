@@ -15,7 +15,7 @@ import javax.validation.Payload
 import kotlin.annotation.AnnotationRetention.RUNTIME
 import kotlin.reflect.KClass
 
-@Documented
+@MustBeDocumented
 @Target(
     ElementType.METHOD,
     ElementType.FIELD,
