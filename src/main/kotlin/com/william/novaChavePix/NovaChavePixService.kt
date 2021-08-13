@@ -1,6 +1,8 @@
 package com.william.novaChavePix
 
 import com.william.CadastraChavePixResponse
+import com.william.bcbClient.BcbClient
+import com.william.bcbClient.classes.CriarChaveBcbRequest
 import com.william.novaChavePix.classes.ChavePix
 import com.william.novaChavePix.classes.NovaChavePixRequest
 import com.william.shared.ErroCustomizado
@@ -16,7 +18,8 @@ import javax.validation.Valid
 @Singleton
 @Validated
 class NovaChavePixService(
-    val client: ItauClient,
+    val itauClient: ItauClient,
+    val bcbClient: BcbClient,
     val repository: ChavePixRepository
 ) {
 
@@ -29,7 +32,7 @@ class NovaChavePixService(
     ): ChavePix {
         LOGGER.info("[SERVICE] Chamando cliente ConsultaConta")
 
-        val respostaConta = client.consultaConta(novaChavePixRequest.idCliente!!, novaChavePixRequest.tipoDaConta!!)
+        val respostaConta = itauClient.consultaConta(novaChavePixRequest.idCliente!!, novaChavePixRequest.tipoDaConta!!)
 
         LOGGER.info("[SERVICE] Cliente chamou ${respostaConta.body()}")
 
@@ -67,6 +70,10 @@ class NovaChavePixService(
 
         LOGGER.info("[SERVICE] Criando nova chave pix definitiva ")
         val chavePixCriada: ChavePix? = contaAssociada?.let { novaChavePixRequest.toModel(it) }
+
+
+        val registraChavePix = bcbClient.registraChavePix(CriarChaveBcbRequest(chavePixCriada!!))
+        println(registraChavePix)
 
         repository.save(chavePixCriada)
         LOGGER.info("Chave pix salva no banco com sucesso $chavePixCriada, retornado a chave pro END POINT ")

@@ -28,7 +28,7 @@ data class NovaChavePixRequest
 
         return ChavePix(
             idCliente = this.idCliente,
-            tipoDaChave = TipoDaChave.valueOf(this.tipoDaChave!!.name),
+            tipoDaChave = TipoDaChaveENUM.valueOf(this.tipoDaChave!!.name),
             valorChave = if (this.tipoDaChave == TipoDaChaveENUM.CHAVE_ALEATORIA) UUID.randomUUID()
                 .toString()
             else this.valorChave!!,

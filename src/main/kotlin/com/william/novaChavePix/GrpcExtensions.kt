@@ -4,9 +4,11 @@ import com.william.CadastraChavePixRequest
 import com.william.RemoveChavePixRequest
 import com.william.TipoDaChave
 import com.william.TipoDaConta
+import com.william.bcbClient.classes.AccountType
 import com.william.deletaChavePix.ExistsPixId
 import com.william.deletaChavePix.RemoveChaveRequestDTO
 import com.william.novaChavePix.classes.NovaChavePixRequest
+import com.william.shared.ErroCustomizado
 
 fun CadastraChavePixRequest.toModel(): NovaChavePixRequest {
     return NovaChavePixRequest(

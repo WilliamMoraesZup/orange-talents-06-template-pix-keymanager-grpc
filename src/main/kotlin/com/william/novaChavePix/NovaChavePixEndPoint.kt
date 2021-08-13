@@ -2,7 +2,7 @@ package com.william.novaChavePix
 
 import com.william.CadastraChavePixRequest
 import com.william.CadastraChavePixResponse
-import com.william.ChavePixServiceGrpc
+import com.william.ChavePixServiceRegistraGrpc
 import com.william.novaChavePix.classes.NovaChavePixRequest
 import com.william.shared.ErroCustomizado
 import io.grpc.Status
@@ -16,7 +16,7 @@ import javax.validation.ConstraintViolationException
 @Singleton
 class NovaChavePixEndPoint(
     @Inject private val service: NovaChavePixService
-) : ChavePixServiceGrpc.ChavePixServiceImplBase() {
+) : ChavePixServiceRegistraGrpc.ChavePixServiceRegistraImplBase() {
 
     private val LOGGER = LoggerFactory.getLogger(this::class.java)
 
@@ -38,8 +38,12 @@ class NovaChavePixEndPoint(
                     .setPixId(chavePixSalvaNoBanco.id.toString())
                     .setClienteId(chavePixSalvaNoBanco.idCliente).build()
             )
+
+
             responseObserver.onCompleted()
             LOGGER.info("onCompleted")
+
+
         } catch (erro: ErroCustomizado) {
             LOGGER.info("Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
             responseObserver.onError(

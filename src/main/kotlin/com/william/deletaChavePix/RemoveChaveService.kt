@@ -37,17 +37,21 @@ class RemoveChaveService(
         LOGGER.info("Passei do chave pix nao encontrada")
 
         if (clienteRemocao.consultaUsuario(requestDTO.clienteId!!).code() == 404) {
-         responseObserver.onError(
+            responseObserver.onError(
                 Status.NOT_FOUND
                     .withDescription("Cliente nao encontrado")
                     .asRuntimeException()
             )
         }
-        LOGGER.info("Passei do CLIENTE nao encontrada")
-        println(repository.existsByIdAndIdCliente(requestDTO.chavePix.toLong(), requestDTO.clienteId))
+        LOGGER.info("Passei do cliente nao encontrado")
+
         if (repository.existsByIdAndIdCliente(requestDTO.chavePix.toLong(), requestDTO.clienteId)) {
             repository.deleteById(requestDTO.chavePix.toLong())
+
+
             LOGGER.info("deletado com sucesso")
+            responseObserver.onNext(EmptyReturn.newBuilder().build())
+
         }
     }
 

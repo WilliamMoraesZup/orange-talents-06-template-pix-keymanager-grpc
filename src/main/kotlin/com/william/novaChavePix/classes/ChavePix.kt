@@ -1,7 +1,7 @@
 package com.william.novaChavePix.classes
 
-import com.william.TipoDaChave
 import com.william.TipoDaConta
+import com.william.novaChavePix.TipoDaChaveENUM
 import javax.persistence.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
@@ -18,11 +18,12 @@ class ChavePix(
     @field:NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val tipoDaChave: TipoDaChave,
+    val tipoDaChave: TipoDaChaveENUM,
 
     @field:NotBlank
     @Column(nullable = false, unique = true)
-    @field:Size(max = 77) var valorChave: String,
+    @field:Size(max = 77)
+    var valorChave: String,
 
     @field:NotNull
     @Enumerated(EnumType.STRING)

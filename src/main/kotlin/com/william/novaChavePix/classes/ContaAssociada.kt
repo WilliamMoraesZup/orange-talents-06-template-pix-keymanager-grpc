@@ -3,16 +3,16 @@ package com.william.novaChavePix.classes
 import javax.persistence.Embeddable
 
 @Embeddable
-class ContaAssociada(
+data class ContaAssociada(
 
-    val instuticao: String,
+    val instituicao: String,
     val nomeDoTitular: String,
-    val cpfDoTitual: String,
+    val cpfDoTitular: String,
     val agencia: String,
     val numeroDaConta: String
 
 ) {
     override fun toString(): String {
-        return "ContaAssociada(instuticao='$instuticao', nomeDoTitular='$nomeDoTitular', cpfDoTitual='$cpfDoTitual', agencia='$agencia', numeroDaConta='$numeroDaConta')"
+        return "ContaAssociada(instuticao='$instituicao', nomeDoTitular='$nomeDoTitular', cpfDoTitual='$cpfDoTitular', agencia='$agencia', numeroDaConta='$numeroDaConta')"
     }
 }

@@ -2,6 +2,7 @@ package com.william.deletaChavePix
 
 import com.william.novaChavePix.ChavePixRepository
 import com.william.shared.ErroCustomizado
+import io.grpc.Status
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext
@@ -47,7 +48,8 @@ class ExistsPixIdValidator(
         if (repository.existsById(value!!.toLong())) {
             println("chave pix valida")
             return true
-        } else throw ErroCustomizado("Chave Pix nao encontrada !!")
+        } else
+      throw ErroCustomizado("Chave Pix nao encontrada !!")
 
     }
 

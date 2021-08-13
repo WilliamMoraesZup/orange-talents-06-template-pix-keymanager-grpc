@@ -11,10 +11,10 @@ data class DadosDaContaResponse(
 ) {
     fun toModel(): ContaAssociada {
         return ContaAssociada(
-            instuticao = this.instituicao.nome,
+            instituicao = this.instituicao.nome,
             nomeDoTitular = this.titular.nome,
-            cpfDoTitual = this.titular.cpf,
-            agencia = this.instituicao.nome,
+            cpfDoTitular = this.titular.cpf,
+            agencia = this.agencia,
             numeroDaConta = this.numero
         )
     }
@@ -24,5 +24,5 @@ data class DadosDaContaResponse(
     }
 }
 
-data class InstituicaoResponse(val nome: String, val ispb: String) {}
-data class TitularResponse(val nome: String, val cpf: String) {}
+data class InstituicaoResponse(val nome: String, val ispb: String)
+data class TitularResponse(val nome: String, val cpf: String)

@@ -1,7 +1,7 @@
 package com.william.novaChavePix
 
 import com.william.CadastraChavePixRequest
-import com.william.ChavePixServiceGrpc
+import com.william.ChavePixServiceRegistraGrpc
 import com.william.TipoDaChave
 import com.william.TipoDaConta
 import com.william.novaChavePix.classes.ChavePix
@@ -9,6 +9,7 @@ import com.william.novaChavePix.classes.ContaAssociada
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
+import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
@@ -18,12 +19,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.*
-import javax.inject.Singleton
 
 
 @MicronautTest(transactional = false)
 internal class NovaChavePixEndPointTest(
-    val grpcClient: ChavePixServiceGrpc.ChavePixServiceBlockingStub,
+    val grpcClient: ChavePixServiceRegistraGrpc.ChavePixServiceRegistraBlockingStub,
     val repository: ChavePixRepository
 ) {
     @BeforeEach
@@ -262,9 +262,9 @@ internal class NovaChavePixEndPointTest(
 
 @Factory
 class RegistraChaveClient {
-    @Singleton
+    @Bean
     fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
-            ChavePixServiceGrpc.ChavePixServiceBlockingStub {
-        return ChavePixServiceGrpc.newBlockingStub(channel)
+            ChavePixServiceRegistraGrpc.ChavePixServiceRegistraBlockingStub {
+        return ChavePixServiceRegistraGrpc.newBlockingStub(channel)
     }
 }

@@ -16,11 +16,12 @@ jpa.default.properties.hibernate.hbm2ddl.auto: update
 
 # http cliente
 endereco.client.itau: ${ITAU_URL:`http://localhost:9091`}
+endereco.client.bcb: ${BCB_URL:`http://localhost:8082`}
 
 
 # mensagem erro
-erro.valorChaveJaExiste: "Essa chave já existe no Sistema"
-erro.clienteNaoExiste: ${cliente_nao_existe:`O cliente nao foi encontrado no sistema do ITAU`}
+erro.valor.chave.ja.existe: "Essa chave já existe no Sistema"
+erro.cliente;nao.existe:  "O cliente nao foi encontrado no sistema do ITAU"
 
 jpa:
   default:
