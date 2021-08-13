@@ -4,7 +4,15 @@ import com.william.novaChavePix.classes.ChavePix
 import com.william.shared.ErroCustomizado
 
 class CriarChaveBcbRequest(chavePix: ChavePix) {
-    val keyType: KeyTypeEnum = KeyTypeEnum.valueOf(chavePix.tipoDaChave.name)
+    val keyType: KeyTypeEnum? = when (chavePix.tipoDaChave.name) {
+        "CPF" -> KeyTypeEnum.CPF
+        "CELULAR " -> KeyTypeEnum.PHONE
+        "EMAIL" -> KeyTypeEnum.EMAIL
+        "CHAVE_ALEATORIA" -> KeyTypeEnum.RANDOM
+        else -> null
+    }
+
+
     val key: String? = chavePix.valorChave
     val bankAccount: BankAccountRequest = BankAccountRequest(chavePix)
     val owner: OwnerRequest = OwnerRequest(chavePix)

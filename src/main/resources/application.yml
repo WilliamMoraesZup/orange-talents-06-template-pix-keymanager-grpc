@@ -3,6 +3,17 @@ micronaut:
     name: keyManager
 
 
+# http cliente
+endereco.client.itau: ${ITAU_URL:`http://localhost:9091`}
+endereco.client.bcb: ${BCB_URL:`http://localhost:8082`}
+
+
+# mensagem erro
+erro.valor.chave.ja.existe: "Essa chave já foi cadatrada"
+erro.cliente.nao.existe:  "O cliente nao foi encontrado no sistema do ITAU"
+erro.valorchavejaexiste: "Essa chave já foi cadatrada"
+
+
 datasources:
   default:
     url: jdbc:postgresql://localhost:5432/keymanager
@@ -11,17 +22,7 @@ datasources:
     password: 123456
     schema-generate: CREATE_DROP
     dialect: POSTGRES
-jpa.default.properties.hibernate.hbm2ddl.auto: update
 
-
-# http cliente
-endereco.client.itau: ${ITAU_URL:`http://localhost:9091`}
-endereco.client.bcb: ${BCB_URL:`http://localhost:8082`}
-
-
-# mensagem erro
-erro.valor.chave.ja.existe: "Essa chave já existe no Sistema"
-erro.cliente;nao.existe:  "O cliente nao foi encontrado no sistema do ITAU"
 
 jpa:
   default:
@@ -35,3 +36,4 @@ jpa:
             non_contextual_creation: true
           database-platform: org.hibernate.dialect.PostgreSQL9Dialect
 
+#logging.pattern.console: %msg%n

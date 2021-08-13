@@ -1,7 +1,10 @@
 package com.william.novaChavePix.classes
 
 import com.william.TipoDaConta
+import com.william.bcbClient.classes.CriarChaveBcbResponse
+import com.william.bcbClient.classes.KeyTypeEnum
 import com.william.novaChavePix.TipoDaChaveENUM
+import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
@@ -33,8 +36,11 @@ class ChavePix(
     @field:Valid
     @Embedded
     val conta: ContaAssociada
+
+
 ) {
 
+    var createdAt: LocalDateTime? = null
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +49,12 @@ class ChavePix(
         return "ChavePix(idCliente=$idCliente, tipoDaChave=$tipoDaChave, valorChave='$valorChave', tipoDaConta=$tipoDaConta, id=$id)"
     }
 
+    fun atualizaHorarioChaveAleatoria(novosDados: CriarChaveBcbResponse) {
+        createdAt = novosDados.createdAt
+        if (novosDados.keyType == KeyTypeEnum.RANDOM) {
+            valorChave = novosDados.key
+        }
+
+    }
 
 }

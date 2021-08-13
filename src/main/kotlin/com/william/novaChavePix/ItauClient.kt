@@ -15,7 +15,7 @@ interface ItauClient {
     fun consultaConta(
         @PathVariable id: String,
         @QueryValue tipo: TipoDaConta
-    ): HttpResponse<DadosDaContaResponse>
+    ): HttpResponse<DadosDaContaResponse?> 
 
 
 }

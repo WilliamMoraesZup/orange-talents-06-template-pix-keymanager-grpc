@@ -7,6 +7,7 @@ import com.william.novaChavePix.classes.NovaChavePixRequest
 import com.william.shared.ErroCustomizado
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
+import io.micronaut.http.client.exceptions.HttpClientException
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,37 +34,40 @@ class NovaChavePixEndPoint(
             val chavePixSalvaNoBanco = service.registraChavePix(novaChave, responseObserver)
 
             LOGGER.info("Sucesso, chamando retorno do OnNext")
+
             responseObserver.onNext(
                 CadastraChavePixResponse.newBuilder()
                     .setPixId(chavePixSalvaNoBanco.id.toString())
                     .setClienteId(chavePixSalvaNoBanco.idCliente).build()
             )
-
-
             responseObserver.onCompleted()
             LOGGER.info("onCompleted")
 
 
         } catch (erro: ErroCustomizado) {
-            LOGGER.info("Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
-            responseObserver.onError(
-                Status.INVALID_ARGUMENT
-                    .withDescription(erro.message)
-                    .asRuntimeException()
-            )
-
-            LOGGER.info("Sobrevivi pelo Catch ERRO CUSTOMIZADO")
+            LOGGER.warn("[ENDPOINT] Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
+//            responseObserver.onError(
+//                Status.INVALID_ARGUMENT
+//                    .withDescription(erro.message)
+//                    .asRuntimeException()
+//            )
         } catch (erro: ConstraintViolationException) {
-            LOGGER.info("Putz, caiu no ConstraintViolationException, Status.INVALID_ARGUMENT")
+            LOGGER.warn("[ENDPOINT] Putz, caiu no ConstraintViolationException, Status.INVALID_ARGUMENT")
             responseObserver.onError(
                 Status.INVALID_ARGUMENT
                     .withDescription(erro.message)
                     .asRuntimeException()
             )
-            LOGGER.info("Chamei INVALID")
+        } catch (erro: HttpClientException) {
+            LOGGER.warn("[ENDPOINT] Putz, parece que o sistema está offline")
+            responseObserver.onError(
+                Status.UNAVAILABLE
+                    .withDescription("Parece que o sistema está offline")
+                    .asRuntimeException()
+            )
         }
 
-        LOGGER.info("PASSEI dos CATCHS ERRO e CONSTRAINT")
+        LOGGER.info("[ENDPOINT] FINAL]")
 
     }
 }
