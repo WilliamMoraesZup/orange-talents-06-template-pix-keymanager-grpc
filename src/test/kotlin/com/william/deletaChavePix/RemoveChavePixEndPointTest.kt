@@ -3,8 +3,8 @@ package com.william.deletaChavePix
 
 import com.william.*
 import com.william.novaChavePix.ChavePixRepository
-import com.william.novaChavePix.classes.ChavePix
-import com.william.novaChavePix.classes.ContaAssociada
+import com.william.novaChavePix.entidades.ChavePix
+import com.william.novaChavePix.entidades.ContaAssociada
 import io.grpc.ManagedChannel
 import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory

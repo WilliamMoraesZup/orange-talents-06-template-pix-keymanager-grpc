@@ -4,8 +4,8 @@ import com.william.CadastraChavePixRequest
 import com.william.ChavePixServiceRegistraGrpc
 import com.william.TipoDaChave
 import com.william.TipoDaConta
-import com.william.novaChavePix.classes.ChavePix
-import com.william.novaChavePix.classes.ContaAssociada
+import com.william.novaChavePix.entidades.ChavePix
+import com.william.novaChavePix.entidades.ContaAssociada
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException

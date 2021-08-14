@@ -1,6 +1,6 @@
-package com.william.bcbClient.classes
+package com.william.adicionaEremoveNoBcb.entidades
 
-import com.william.novaChavePix.classes.ChavePix
+import com.william.novaChavePix.entidades.ChavePix
 import com.william.shared.ErroCustomizado
 
 class CriarChaveBcbRequest(chavePix: ChavePix) {

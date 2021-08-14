@@ -1,6 +1,6 @@
 package com.william.novaChavePix
 
-import com.william.novaChavePix.classes.NovaChavePixRequest
+import com.william.novaChavePix.entidades.NovaChavePixRequest
 import com.william.shared.ErroCustomizado
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator

@@ -1,6 +1,6 @@
 package com.william.novaChavePix
 
-import com.william.novaChavePix.classes.ContaAssociada
+import com.william.novaChavePix.entidades.ContaAssociada
 
 data class DadosDaContaResponse(
     val tipo: String,

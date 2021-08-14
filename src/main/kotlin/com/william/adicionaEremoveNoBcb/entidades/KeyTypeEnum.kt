@@ -1,4 +1,4 @@
-package com.william.bcbClient.classes
+package com.william.adicionaEremoveNoBcb.entidades
 
 enum class KeyTypeEnum {
 

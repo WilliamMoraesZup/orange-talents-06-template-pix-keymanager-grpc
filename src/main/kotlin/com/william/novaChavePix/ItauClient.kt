@@ -15,7 +15,12 @@ interface ItauClient {
     fun consultaConta(
         @PathVariable id: String,
         @QueryValue tipo: TipoDaConta
-    ): HttpResponse<DadosDaContaResponse?> 
+    ): HttpResponse<DadosDaContaResponse?>
 
+
+    @Get("/api/v1/clientes/{clienteId}")
+    fun consultaUsuario(
+        @QueryValue clienteId: String
+    ): HttpResponse<Map<String, Object>>
 
 }

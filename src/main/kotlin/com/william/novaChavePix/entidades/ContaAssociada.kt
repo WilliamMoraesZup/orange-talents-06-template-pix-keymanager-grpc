@@ -1,4 +1,4 @@
-package com.william.novaChavePix.classes
+package com.william.novaChavePix.entidades
 
 import javax.persistence.Embeddable
 

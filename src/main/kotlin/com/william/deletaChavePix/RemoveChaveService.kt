@@ -1,9 +1,15 @@
 package com.william.deletaChavePix
 
 import com.william.EmptyReturn
+import com.william.adicionaEremoveNoBcb.BancoCentralClient
+import com.william.adicionaEremoveNoBcb.entidades.DeletePixKeyRequest
+import com.william.adicionaEremoveNoBcb.entidades.IsbbCodigo
 import com.william.novaChavePix.ChavePixRepository
+import com.william.novaChavePix.ItauClient
+import com.william.shared.ErroCustomizado
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
+import io.micronaut.http.HttpStatus
 import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
 import javax.inject.Singleton
@@ -15,7 +21,8 @@ import javax.validation.Valid
 @Validated
 class RemoveChaveService(
     val repository: ChavePixRepository,
-    val clienteRemocao: ItauClienteRemocao
+    val clientItau: ItauClient,
+    val clientBcb: BancoCentralClient
 ) {
     private val LOGGER = LoggerFactory.getLogger(this::class.java)
 
@@ -26,30 +33,53 @@ class RemoveChaveService(
     ) {
         LOGGER.info("[RemoveChaveService] Passei da validação")
 
-        if (!repository.existsById(requestDTO.chavePix!!.toLong())) {
-            LOGGER.info("Nao achei PIX ID")
+        if (!repository.existsByValorChave(requestDTO.chavePix!!)) {
+            LOGGER.warn("PixId nao encontrada")
             responseObserver.onError(
                 Status.NOT_FOUND
                     .withDescription("Chave Pix nao encontrada")
                     .asRuntimeException()
             )
         }
-        LOGGER.info("Passei do chave pix nao encontrada")
-
-        if (clienteRemocao.consultaUsuario(requestDTO.clienteId!!).code() == 404) {
+        val consultaUsuario = clientItau.consultaUsuario(requestDTO.clienteId!!)
+        if (consultaUsuario.code() == 404) {
+            LOGGER.warn("ClienteId nao encontrado")
             responseObserver.onError(
                 Status.NOT_FOUND
                     .withDescription("Cliente nao encontrado")
                     .asRuntimeException()
             )
         }
-        LOGGER.info("Passei do cliente nao encontrado")
-
-        if (repository.existsByIdAndIdCliente(requestDTO.chavePix.toLong(), requestDTO.clienteId)) {
-            repository.deleteById(requestDTO.chavePix.toLong())
 
 
-            LOGGER.info("deletado com sucesso")
+
+        if (repository.existsByValorChaveAndIdCliente(requestDTO.chavePix, requestDTO.clienteId)) {
+
+            LOGGER.info("[REMOVE SERVICE] dados encontrados no banco.. buscando ByID")
+            val clienteBuscado = repository.findByIdCliente(requestDTO.clienteId)
+
+
+            LOGGER.info("[REMOVE SERVICE] Encontrado ${clienteBuscado.get()}")
+
+            val isbp = IsbbCodigo(clienteBuscado.get().conta.instituicao).isbp
+            println(isbp)
+            val chaveDeletada = clientBcb.removeChavePix(
+                key = clienteBuscado.get().valorChave,
+                body = DeletePixKeyRequest(clienteBuscado.get().valorChave, isbp)
+            )
+
+            LOGGER.info("[REMOVE SERVICE] Resposta do Cliente BCB: ${chaveDeletada.status()}")
+
+            if (chaveDeletada.status.equals(HttpStatus.NOT_FOUND)) {
+                throw ErroCustomizado("Chave nao encontrada no BCB")
+            }
+
+            if (chaveDeletada.status.equals(HttpStatus.OK)) {
+                repository.delete(clienteBuscado.get())
+                LOGGER.info("deletado com sucesso")
+            }
+
+
             responseObserver.onNext(EmptyReturn.newBuilder().build())
 
         }

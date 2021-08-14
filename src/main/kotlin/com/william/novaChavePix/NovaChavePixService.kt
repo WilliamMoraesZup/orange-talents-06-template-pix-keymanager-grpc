@@ -1,10 +1,10 @@
 package com.william.novaChavePix
 
 import com.william.CadastraChavePixResponse
-import com.william.bcbClient.BcbClient
-import com.william.bcbClient.classes.CriarChaveBcbRequest
-import com.william.novaChavePix.classes.ChavePix
-import com.william.novaChavePix.classes.NovaChavePixRequest
+import com.william.adicionaEremoveNoBcb.BancoCentralClient
+import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbRequest
+import com.william.novaChavePix.entidades.ChavePix
+import com.william.novaChavePix.entidades.NovaChavePixRequest
 import com.william.shared.ErroCustomizado
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
@@ -20,7 +20,7 @@ import javax.validation.Valid
 @Validated
 class NovaChavePixService(
     val itauClient: ItauClient,
-    val bcbClient: BcbClient,
+    val bancoCentralClient: BancoCentralClient,
     val repository: ChavePixRepository
 ) {
 
@@ -81,7 +81,7 @@ class NovaChavePixService(
         LOGGER.info("[SERVICE] Criando nova chave pix definitiva")
         val chavePixCriada: ChavePix? = contaAssociada?.let { novaChavePixRequest.toModel(it) }
 
-        val registraChavePix = bcbClient.registraChavePix(CriarChaveBcbRequest(chavePixCriada!!))
+        val registraChavePix = bancoCentralClient.registraChavePix(CriarChaveBcbRequest(chavePixCriada!!))
 
         if (registraChavePix.status.equals(HttpStatus.NOT_FOUND)) {
             responseObserver.onError(

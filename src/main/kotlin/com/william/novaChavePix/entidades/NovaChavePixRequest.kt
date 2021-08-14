@@ -1,4 +1,4 @@
-package com.william.novaChavePix.classes
+package com.william.novaChavePix.entidades
 
 import com.william.TipoDaChave
 import com.william.TipoDaConta

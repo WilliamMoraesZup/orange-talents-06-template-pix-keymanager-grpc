@@ -1,8 +1,9 @@
-package com.william.bcbClient
+package com.william.adicionaEremoveNoBcb
 
-import com.william.bcbClient.classes.CriarChaveBcbRequest
-import com.william.bcbClient.classes.CriarChaveBcbResponse
-import com.william.bcbClient.classes.DeletePixKeyRequest
+import com.william.bcbClient.DeletePixKeyResponse
+import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbRequest
+import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbResponse
+import com.william.adicionaEremoveNoBcb.entidades.DeletePixKeyRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
@@ -13,7 +14,7 @@ import io.micronaut.http.client.annotation.Client
 
 
 @Client("\${endereco.client.bcb}")
-interface BcbClient {
+interface BancoCentralClient {
 
 
     @Post(
@@ -23,9 +24,10 @@ interface BcbClient {
     )
     fun registraChavePix(@Body request: CriarChaveBcbRequest): HttpResponse<CriarChaveBcbResponse>
 
-    @Delete("/api/v1/pix/keys/{id}",
+    @Delete(
+        "/api/v1/pix/keys/{key}",
         consumes = [MediaType.APPLICATION_XML],
         processes = [MediaType.APPLICATION_XML]
     )
-    fun removeChavePix(@PathVariable id:String, @Body request: DeletePixKeyRequest) : HttpResponse<DeletePixKeyResponse>
+    fun removeChavePix(@PathVariable key:String, @Body body: DeletePixKeyRequest) : HttpResponse<DeletePixKeyResponse>
 }

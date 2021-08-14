@@ -3,7 +3,7 @@ package com.william.novaChavePix
 import com.william.CadastraChavePixRequest
 import com.william.CadastraChavePixResponse
 import com.william.ChavePixServiceRegistraGrpc
-import com.william.novaChavePix.classes.NovaChavePixRequest
+import com.william.novaChavePix.entidades.NovaChavePixRequest
 import com.william.shared.ErroCustomizado
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
@@ -46,11 +46,11 @@ class NovaChavePixEndPoint(
 
         } catch (erro: ErroCustomizado) {
             LOGGER.warn("[ENDPOINT] Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
-//            responseObserver.onError(
-//                Status.INVALID_ARGUMENT
-//                    .withDescription(erro.message)
-//                    .asRuntimeException()
-//            )
+             responseObserver.onError(
+                 Status.INVALID_ARGUMENT
+                    .withDescription(erro.message)
+                     .asRuntimeException()
+           )
         } catch (erro: ConstraintViolationException) {
             LOGGER.warn("[ENDPOINT] Putz, caiu no ConstraintViolationException, Status.INVALID_ARGUMENT")
             responseObserver.onError(

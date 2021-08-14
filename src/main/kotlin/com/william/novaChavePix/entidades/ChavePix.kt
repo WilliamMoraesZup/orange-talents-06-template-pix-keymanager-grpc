@@ -1,8 +1,8 @@
-package com.william.novaChavePix.classes
+package com.william.novaChavePix.entidades
 
 import com.william.TipoDaConta
-import com.william.bcbClient.classes.CriarChaveBcbResponse
-import com.william.bcbClient.classes.KeyTypeEnum
+import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbResponse
+import com.william.adicionaEremoveNoBcb.entidades.KeyTypeEnum
 import com.william.novaChavePix.TipoDaChaveENUM
 import java.time.LocalDateTime
 import javax.persistence.*
