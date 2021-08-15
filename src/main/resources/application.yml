@@ -11,7 +11,6 @@ endereco.client.bcb: ${BCB_URL:`http://localhost:8082`}
 # mensagem erro
 erro.valor.chave.ja.existe: "Essa chave já foi cadatrada"
 erro.cliente.nao.existe:  "O cliente nao foi encontrado no sistema do ITAU"
-erro.valorchavejaexiste: "Essa chave já foi cadatrada"
 
 
 datasources:

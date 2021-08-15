@@ -37,6 +37,7 @@ class ExistsPixIdValidator(
         println("validando pix id")
 
         if (repository.existsByValorChave(value!!)) {
+            println(value)
             println("chave pix valida")
             return true
         } else

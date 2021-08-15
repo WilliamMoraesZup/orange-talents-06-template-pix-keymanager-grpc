@@ -41,7 +41,11 @@ class RemoveChaveService(
                     .asRuntimeException()
             )
         }
+        LOGGER.info("[RemoveChaveService] Buscando o cliente no sistema do ITAU")
         val consultaUsuario = clientItau.consultaUsuario(requestDTO.clienteId!!)
+
+
+        LOGGER.info("[RemoveChaveService] Resultado da consulta no ITAU= ${consultaUsuario.status}")
         if (consultaUsuario.code() == 404) {
             LOGGER.warn("ClienteId nao encontrado")
             responseObserver.onError(
@@ -51,32 +55,39 @@ class RemoveChaveService(
             )
         }
 
-
-
+        LOGGER.info("[RemoveChaveService] Verifcando se a chavePix e Cliente ID coincidem no banco local")
         if (repository.existsByValorChaveAndIdCliente(requestDTO.chavePix, requestDTO.clienteId)) {
 
-            LOGGER.info("[REMOVE SERVICE] dados encontrados no banco.. buscando ByID")
+            //Posso Refatorar para eliminar essa parte
+            LOGGER.info("[REMOVE SERVICE] dados encontrados no banco para pegar a instituiçao. ISBP")
             val clienteBuscado = repository.findByIdCliente(requestDTO.clienteId)
 
 
-            LOGGER.info("[REMOVE SERVICE] Encontrado ${clienteBuscado.get()}")
-
             val isbp = IsbbCodigo(clienteBuscado.get().conta.instituicao).isbp
-            println(isbp)
+            val chavePix = requestDTO.chavePix
+            val deletePixKeyRequest = DeletePixKeyRequest(chavePix, isbp)
+
+            println(deletePixKeyRequest)
             val chaveDeletada = clientBcb.removeChavePix(
-                key = clienteBuscado.get().valorChave,
-                body = DeletePixKeyRequest(clienteBuscado.get().valorChave, isbp)
+                key = chavePix,
+                body = deletePixKeyRequest
             )
 
             LOGGER.info("[REMOVE SERVICE] Resposta do Cliente BCB: ${chaveDeletada.status()}")
 
-            if (chaveDeletada.status.equals(HttpStatus.NOT_FOUND)) {
-                throw ErroCustomizado("Chave nao encontrada no BCB")
-            }
-
             if (chaveDeletada.status.equals(HttpStatus.OK)) {
                 repository.delete(clienteBuscado.get())
                 LOGGER.info("deletado com sucesso")
+            }
+
+            if (chaveDeletada.status.equals(HttpStatus.NOT_FOUND)) {
+                LOGGER.warn("[REMOVE_ENDPOINT] Chave nao encontrada no BCB")
+                responseObserver.onError(
+                    Status.NOT_FOUND
+                        .withDescription("Chave nao encontrada no BCB")
+                        .asRuntimeException()
+                )
+                throw ErroCustomizado("Chave nao encontrada no BCB")
             }
 
 

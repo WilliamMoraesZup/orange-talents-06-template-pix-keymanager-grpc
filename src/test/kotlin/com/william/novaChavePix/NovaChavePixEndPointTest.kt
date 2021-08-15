@@ -94,7 +94,7 @@ internal class NovaChavePixEndPointTest(
 
         repository.save(
             ChavePix(
-                "c56dfef4-7901-44fb-84e2-a2cefb157890", TipoDaChave.CPF, valorChave,
+                "c56dfef4-7901-44fb-84e2-a2cefb157890", TipoDaChaveENUM.CPF, valorChave,
                 TipoDaConta.CONTA_CORRENTE,
                 ContaAssociada(
                     "ITAU",

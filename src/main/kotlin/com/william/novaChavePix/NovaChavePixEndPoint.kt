@@ -13,7 +13,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import javax.validation.ConstraintViolationException
 
-
 @Singleton
 class NovaChavePixEndPoint(
     @Inject private val service: NovaChavePixService
@@ -26,31 +25,32 @@ class NovaChavePixEndPoint(
         responseObserver: StreamObserver<CadastraChavePixResponse>
     ) {
 
+
         try {
-            LOGGER.info("passando NovaChavePixRequest para toModel")
+            LOGGER.info("[ENDPOINT] Passando NovaChavePixRequest para toModel")
             val novaChave: NovaChavePixRequest = request.toModel()
 
-            LOGGER.info("Sucesso, chamando service para salvar chave pix")
+            LOGGER.info("[ENDPOINT] Sucesso, chamando service para salvar chave pix")
             val chavePixSalvaNoBanco = service.registraChavePix(novaChave, responseObserver)
 
-            LOGGER.info("Sucesso, chamando retorno do OnNext")
+            LOGGER.info("[ENDPOINT] Sucesso, chamando retorno do OnNext")
 
             responseObserver.onNext(
                 CadastraChavePixResponse.newBuilder()
-                    .setPixId(chavePixSalvaNoBanco.id.toString())
+                    .setPixId(chavePixSalvaNoBanco.valorChave)
                     .setClienteId(chavePixSalvaNoBanco.idCliente).build()
             )
             responseObserver.onCompleted()
-            LOGGER.info("onCompleted")
+            LOGGER.info("[ENDPOINT] onCompleted")
 
 
         } catch (erro: ErroCustomizado) {
             LOGGER.warn("[ENDPOINT] Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
-             responseObserver.onError(
-                 Status.INVALID_ARGUMENT
+            responseObserver.onError(
+                Status.INVALID_ARGUMENT
                     .withDescription(erro.message)
-                     .asRuntimeException()
-           )
+                    .asRuntimeException()
+            )
         } catch (erro: ConstraintViolationException) {
             LOGGER.warn("[ENDPOINT] Putz, caiu no ConstraintViolationException, Status.INVALID_ARGUMENT")
             responseObserver.onError(
