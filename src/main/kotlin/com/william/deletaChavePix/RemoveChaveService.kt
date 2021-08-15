@@ -6,7 +6,7 @@ import com.william.adicionaEremoveNoBcb.entidades.DeletePixKeyRequest
 import com.william.adicionaEremoveNoBcb.entidades.IsbbCodigo
 import com.william.novaChavePix.ChavePixRepository
 import com.william.novaChavePix.ItauClient
-import com.william.shared.ErroCustomizado
+import com.william.exceptions.ErroCustomizado
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import io.micronaut.http.HttpStatus

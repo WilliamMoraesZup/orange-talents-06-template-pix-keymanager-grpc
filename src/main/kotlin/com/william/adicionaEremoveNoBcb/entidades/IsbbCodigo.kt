@@ -1,6 +1,6 @@
 package com.william.adicionaEremoveNoBcb.entidades
 
-import com.william.shared.ErroCustomizado
+import com.william.exceptions.ErroCustomizado
 
 data class IsbbCodigo(val instituicao: String) {
     var isbp: String

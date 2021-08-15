@@ -4,16 +4,13 @@ import com.william.CadastraChavePixRequest
 import com.william.CadastraChavePixResponse
 import com.william.ChavePixServiceRegistraGrpc
 import com.william.novaChavePix.entidades.NovaChavePixRequest
-import com.william.shared.ErroCustomizado
-import io.grpc.Status
+import com.william.exceptions.ErrorHandler
 import io.grpc.stub.StreamObserver
-import io.micronaut.http.client.exceptions.HttpClientException
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import javax.inject.Singleton
-import javax.validation.ConstraintViolationException
 
-@Singleton
+@Singleton @ErrorHandler
 class NovaChavePixEndPoint(
     @Inject private val service: NovaChavePixService
 ) : ChavePixServiceRegistraGrpc.ChavePixServiceRegistraImplBase() {
@@ -26,7 +23,6 @@ class NovaChavePixEndPoint(
     ) {
 
 
-        try {
             LOGGER.info("[ENDPOINT] Passando NovaChavePixRequest para toModel")
             val novaChave: NovaChavePixRequest = request.toModel()
 
@@ -44,30 +40,31 @@ class NovaChavePixEndPoint(
             LOGGER.info("[ENDPOINT] onCompleted")
 
 
-        } catch (erro: ErroCustomizado) {
-            LOGGER.warn("[ENDPOINT] Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
-            responseObserver.onError(
-                Status.INVALID_ARGUMENT
-                    .withDescription(erro.message)
-                    .asRuntimeException()
-            )
-        } catch (erro: ConstraintViolationException) {
-            LOGGER.warn("[ENDPOINT] Putz, caiu no ConstraintViolationException, Status.INVALID_ARGUMENT")
-            responseObserver.onError(
-                Status.INVALID_ARGUMENT
-                    .withDescription(erro.message)
-                    .asRuntimeException()
-            )
-        } catch (erro: HttpClientException) {
-            LOGGER.warn("[ENDPOINT] Putz, parece que o sistema está offline")
-            responseObserver.onError(
-                Status.UNAVAILABLE
-                    .withDescription("Parece que o sistema está offline")
-                    .asRuntimeException()
-            )
-        }
+//        } catch (erro: ErroCustomizado) {
+//            LOGGER.warn("[ENDPOINT] Putz, caiu no erro customizado, Status.INVALID_ARGUMENT")
+//            responseObserver.onError(
+//                Status.INVALID_ARGUMENT
+//                    .withDescription(erro.message)
+//                    .asRuntimeException()
+//            )
+//        } catch (erro: ConstraintViolationException) {
+//            LOGGER.warn("[ENDPOINT] Putz, caiu no ConstraintViolationException, Status.INVALID_ARGUMENT")
+//            responseObserver.onError(
+//                Status.INVALID_ARGUMENT
+//                    .withDescription(erro.message)
+//                    .asRuntimeException()
+//            )
+//        } catch (erro: HttpClientException) {
+//            LOGGER.warn("[ENDPOINT] Putz, parece que o sistema está offline")
+//            responseObserver.onError(
+//                Status.UNAVAILABLE
+//                    .withDescription("Parece que o sistema está offline")
+//                    .asRuntimeException()
+//            )
+//        }
 
         LOGGER.info("[ENDPOINT] FINAL]")
 
-    }
+
+}
 }

@@ -5,10 +5,13 @@ import com.william.adicionaEremoveNoBcb.BancoCentralClient
 import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbRequest
 import com.william.novaChavePix.entidades.ChavePix
 import com.william.novaChavePix.entidades.NovaChavePixRequest
-import com.william.shared.ErroCustomizado
-import io.grpc.Status
+import com.william.exceptions.ErroCustomizado
+import com.william.exceptions.ChaveJaExisteSistema
+import com.william.exceptions.ClienteNotFound
+import com.william.exceptions.ErroChaveJaExisteBCB
 import io.grpc.stub.StreamObserver
 import io.micronaut.http.HttpStatus
+import io.micronaut.http.client.exceptions.HttpClientException
 import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
 import javax.inject.Singleton
@@ -38,44 +41,44 @@ class NovaChavePixService(
 
         LOGGER.info("[SERVICE] Retorno do cliente: ${respostaConta!!.status}")
 
-        if (respostaConta!!.code() != 200 && respostaConta.code() != 404) {
-            responseObserver.onError(
-                Status.INTERNAL
-                    .withDescription("Houve um erro ao conectar no sistema do ITAU")
-                    .asRuntimeException()
-            )
-            responseObserver.onCompleted()
+
+        //Confere se sistema está offline
+        if (respostaConta!!.code() != 200 && respostaConta.code() != 404) throw HttpClientException("Sistema do Itau está offilne") .also {  }
+
             LOGGER.warn("[SERVICE] O cliente itau parece estar offline")
 
-        }
 
-        if (respostaConta.status.equals(HttpStatus.NOT_FOUND)) {
-            LOGGER.warn("[SERVICE] A chave nao existe -> NOT_FOUND")
 
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription("{erro.cliente.nao.existe}")
-                    .asRuntimeException()
-            )
-            responseObserver.onCompleted()
-            LOGGER.info("[SERVICE] Lançando ErroCustomizado \${erro.cliente.nao.existe}")
-            throw ErroCustomizado("\${erro.cliente.nao.existe}")
-        }
+        if (respostaConta.status.equals(HttpStatus.NOT_FOUND)) LOGGER.warn("[SERVICE] A chave nao existe -> NOT_FOUND")
+            .also { throw ClienteNotFound(" A chave nao existe -> NOT_FOUND") }
+//
+//
+//            responseObserver.onError(
+//                Status.NOT_FOUND
+//                    .withDescription("{erro.cliente.nao.existe}")
+//                    .asRuntimeException()
+//            )
+//            responseObserver.onCompleted()
+//            LOGGER.info("[SERVICE] Lançando ErroCustomizado \${erro.cliente.nao.existe}")
+        //  throw ErroCustomizado("\${erro.cliente.nao.existe}")
 
-        if (repository.existsByValorChave(novaChavePixRequest.valorChave!!)) {
+
+        if (repository.existsByValorChave(novaChavePixRequest.valorChave!!))
             LOGGER.warn("[SERVICE] A chave já existe -> ALREADY_EXISTS")
+                .also {
+                    throw ChaveJaExisteSistema("\${erro.valor.chave.ja.existe}")
+                }
 
-            responseObserver.onError(
-                Status.ALREADY_EXISTS
-                    .withDescription("\${erro.valor.chave.ja.existe}")
-                    .asRuntimeException()
-            )
 
-            // responseObserver.onCompleted()
-            LOGGER.info("[SERVICE] Lancando ErroCustomizado valorchavejaexiste")
-            throw ErroCustomizado("\${erro.valor.chave.ja.existe}")
+//            responseObserver.onError(
+//                Status.ALREADY_EXISTS
+//                    .withDescription("\${erro.valor.chave.ja.existe}")
+//                    .asRuntimeException()
+//            )
 
-        }
+        // responseObserver.onCompleted()
+//            LOGGER.info("[SERVICE] Lancando ErroCustomizado valorchavejaexiste")
+
 
         LOGGER.info("[SERVICE] Criando uma conta associada")
         val contaAssociada = respostaConta.body()?.toModel()
@@ -101,18 +104,19 @@ class NovaChavePixService(
         LOGGER.info("[SERVICE] CONFERINDO SE A CHAVE JÀ EXISTE NO BCB...")
         val registraChavePix = bancoCentralClient.registraChavePix(CriarChaveBcbRequest(chavePixCriada!!))
 
-        if (registraChavePix.status.equals(HttpStatus.UNPROCESSABLE_ENTITY)) {
+        if (registraChavePix.status.equals(HttpStatus.UNPROCESSABLE_ENTITY))
+            throw ErroChaveJaExisteBCB(" Essa chave já está cadatrada no sistema do BCB  ")
 
-            responseObserver.onError(
-                Status.NOT_FOUND
-                    .withDescription("Essa chave já foi cadastrada no BCB")
-                    .asRuntimeException()
-            )
-            responseObserver.onCompleted()
-            LOGGER.warn("[SERVICE] Essa chave já está cadatrada no sistema do BCB")
+//            responseObserver.onError(
+//                Status.NOT_FOUND
+//                    .withDescription("Essa chave já foi cadastrada no BCB")
+//                    .asRuntimeException()
+//            )
+//            responseObserver.onCompleted()
 
-            throw ErroCustomizado("\${erro.valor.chave.ja.existe}")
-        }
+        LOGGER.warn("[SERVICE] Essa chave já está cadatrada no sistema do BCB")
+
+        //     throw ErroCustomizado("\${erro.valor.chave.ja.existe}")
 
         if (!registraChavePix.status.equals(HttpStatus.CREATED)) {
             throw   ErroCustomizado("erro ao salvar a nova chave no BCB")

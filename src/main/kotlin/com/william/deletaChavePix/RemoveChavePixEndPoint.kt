@@ -4,6 +4,7 @@ import com.william.ChavePixServiceRemoveGrpc
 import com.william.EmptyReturn
 import com.william.RemoveChavePixRequest
 import com.william.novaChavePix.toModel
+import com.william.exceptions.ErrorHandler
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import io.micronaut.http.client.exceptions.HttpClientException
@@ -13,6 +14,7 @@ import javax.inject.Singleton
 
 
 @Singleton
+@ErrorHandler
 class RemoveChavePixEndPoint(
     @Inject private val service: RemoveChaveService
 ) : ChavePixServiceRemoveGrpc.ChavePixServiceRemoveImplBase() {

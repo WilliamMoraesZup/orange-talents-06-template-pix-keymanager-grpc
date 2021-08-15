@@ -20,8 +20,7 @@ import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.http.HttpResponse
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -50,9 +49,8 @@ internal class RemoveChavePixEndPointTest(
 //        return Mockito.mock(ItauClient::class.java)
 //    }
 
-    @BeforeEach
-    fun start() {
-        val chavePix = ChavePix(
+    fun createChavePix(): ChavePix {
+        return ChavePix(
             "c56dfef4-7901-44fb-84e2-a2cefb157890", TipoDaChaveENUM.CPF, "41911390880",
             TipoDaConta.CONTA_CORRENTE,
             ContaAssociada(
@@ -63,34 +61,38 @@ internal class RemoveChavePixEndPointTest(
                 "042220"
             )
         )
-        chavePixSalva = repository.save(chavePix)
+    }
+
+    @BeforeEach
+    fun start() {
+        repository.save(createChavePix())
     }
 
     @Test
-    fun `Deve remover chave pix e nao dar erro`() {
+    fun `Deve remover chave pix do bcb e nao dar erro`() {
 
+
+        val valorChave = createChavePix().valorChave
         Mockito.`when`(
             clientBcb.removeChavePix(
-                "41911390880",
-                DeletePixKeyRequest("41911390880", "60701190")
+                valorChave,
+                DeletePixKeyRequest(valorChave, "60701190")
             )
         ).thenReturn(HttpResponse.ok())
 
 
-        println("run")
-
         val retorno = grpcClient.remove(
             RemoveChavePixRequest
                 .newBuilder()
-                .setPixId("41911390880")
-                .setClienteId("c56dfef4-7901-44fb-84e2-a2cefb157890")
+                .setPixId(valorChave)
+                .setClienteId(createChavePix().idCliente)
                 .build()
         )
         println(retorno)
 
-        assertEquals(
-            EmptyReturn.newBuilder().build(), retorno
-        )
+        assertEquals(EmptyReturn.newBuilder().build(), retorno)
+        assertTrue(repository.findByValorChave(valorChave).isEmpty())
+
     }
 
     @Test //VOU REFATORAR EM BREVE

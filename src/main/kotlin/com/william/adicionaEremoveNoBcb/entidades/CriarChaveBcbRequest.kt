@@ -1,7 +1,7 @@
 package com.william.adicionaEremoveNoBcb.entidades
 
 import com.william.novaChavePix.entidades.ChavePix
-import com.william.shared.ErroCustomizado
+import com.william.exceptions.ErroCustomizado
 
 class CriarChaveBcbRequest(chavePix: ChavePix) {
     val keyType: KeyTypeEnum? = when (chavePix.tipoDaChave.name) {

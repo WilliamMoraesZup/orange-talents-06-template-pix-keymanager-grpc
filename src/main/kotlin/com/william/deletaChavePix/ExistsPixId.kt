@@ -1,7 +1,7 @@
 package com.william.deletaChavePix
 
+import com.william.exceptions.ChaveNaoEncontradaNoSistema
 import com.william.novaChavePix.ChavePixRepository
-import com.william.shared.ErroCustomizado
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext
@@ -34,7 +34,7 @@ class ExistsPixIdValidator(
         annotationMetadata: AnnotationValue<ExistsPixId>,
         context: ConstraintValidatorContext
     ): Boolean {
-        println("validando pix id")
+        println("validando pix id pelo ExistsPixIdValidator")
 
         if (repository.existsByValorChave(value!!)) {
             println(value)
@@ -42,7 +42,7 @@ class ExistsPixIdValidator(
             return true
         } else
         //Preciso de um ERROR handler para retornar  um Status runtime
-            throw ErroCustomizado("Chave Pix nao encontrada !!")
+            throw ChaveNaoEncontradaNoSistema("Chave Pix nao encontrada no sistema!!")
 
     }
 
