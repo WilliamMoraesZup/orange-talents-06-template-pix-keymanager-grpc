@@ -1,9 +1,9 @@
 package com.william.novaChavePix
 
-import com.william.CadastraChavePixRequest
-import com.william.RemoveChavePixRequest
-import com.william.TipoDaChave
-import com.william.TipoDaConta
+import com.william.*
+import com.william.consultaChavePix.ChaveRequest
+import com.william.consultaChavePix.ConsultaChavePixRequestInterface
+import com.william.consultaChavePix.PixIdRequest
 import com.william.deletaChavePix.RemoveChaveRequestDTO
 import com.william.novaChavePix.entidades.NovaChavePixRequest
 
@@ -23,7 +23,12 @@ fun CadastraChavePixRequest.toModel(): NovaChavePixRequest {
 }
 
 fun RemoveChavePixRequest.toModel(): RemoveChaveRequestDTO {
-    return RemoveChaveRequestDTO( pixId, clienteId)
+    return RemoveChaveRequestDTO(pixId, clienteId)
 
 }
 
+fun ConsultaChavePixRequest.toModel(): ConsultaChavePixRequestInterface {
+    if (this.hasChave()) return ChaveRequest(chave)
+    if (this.hasPixIdRequest()) return PixIdRequest(pixIdRequest.clienteId, pixIdRequest.clienteId)
+    else throw IllegalStateException("erro ao receber os dados do request")
+}

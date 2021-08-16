@@ -5,12 +5,16 @@ option java_outer_classname = "ChavePixOuterClassName";
 package com.william;
 
 service ChavePixServiceRegistra {
-    rpc registra(CadastraChavePixRequest) returns (CadastraChavePixResponse) {}
+  rpc registra(CadastraChavePixRequest) returns (CadastraChavePixResponse) {}
 
 }
 service ChavePixServiceRemove {
-    rpc remove(RemoveChavePixRequest)returns (EmptyReturn) {}
+  rpc remove(RemoveChavePixRequest)returns (EmptyReturn) {}
 
+}
+
+service  ChavePixServiceConsulta {
+  rpc consulta(ConsultaChavePixRequest) returns (ConsultaChavePixResponse) {}
 }
 
 enum TipoDaChave {
@@ -46,3 +50,26 @@ message RemoveChavePixRequest{
   string clienteId = 2;
 }
 message EmptyReturn{}
+
+message ConsultaChavePixRequest{
+  message ConsultaPorPixId{
+    string clienteId = 1;
+    string pixId = 2;
+  }
+
+  oneof opcaoConsulta {
+    ConsultaPorPixId pixIdRequest = 1;
+    string chave = 2;
+
+  }
+}
+
+message ConsultaChavePixResponse{
+  message ChavePix{
+    message ContaInfo{
+      TipoDaConta tipoDaConta = 1;
+      string instituicao =2 ;
+
+    }
+  }
+}

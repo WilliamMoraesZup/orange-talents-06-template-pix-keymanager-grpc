@@ -32,16 +32,12 @@ class ValidPixKeyValidator : ConstraintValidator<ValidTipoChave, NovaChavePixReq
         annotationMetadata: AnnotationValue<ValidTipoChave>,
         context: ConstraintValidatorContext
     ): Boolean {
-        println("VALIDANDO KEY")
         if (value?.tipoDaChave == null) {
             return false
 
         }
-        println(value.tipoDaChave)
-        println(value.valorChave)
 
         val ehValido = value.tipoDaChave.valida(value.valorChave)
-        println(ehValido)
 
         if (!ehValido) {
             throw ParametrosInvalidos("O campo ${value.tipoDaChave} está inválido")
