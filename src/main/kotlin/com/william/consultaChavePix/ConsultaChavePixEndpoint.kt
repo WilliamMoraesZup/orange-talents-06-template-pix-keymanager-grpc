@@ -8,12 +8,15 @@ import io.grpc.stub.StreamObserver
 import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import javax.inject.Singleton
+
 //@ErrorHandler
 @Singleton
-class ConsultaChavePixEndpoint(@Inject val consultaService: ConsultaService) :
+class ConsultaChavePixEndpoint(
+    @Inject val consultaService: ConsultaService) :
     ChavePixServiceConsultaGrpc.ChavePixServiceConsultaImplBase() {
-
     private val LOGGER = LoggerFactory.getLogger(this::class.java)
+
+
     override fun consulta(
         request: ConsultaChavePixRequest,
         responseObserver: StreamObserver<ConsultaChavePixResponse>

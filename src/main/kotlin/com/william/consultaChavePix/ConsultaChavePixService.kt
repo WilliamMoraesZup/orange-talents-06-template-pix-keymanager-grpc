@@ -3,8 +3,8 @@ package com.william.consultaChavePix
 import com.william.ConsultaChavePixResponse
 import com.william.adicionaEremoveNoBcb.BancoCentralClient
 import com.william.exceptions.StatusNotFound
-import com.william.exceptions.ErroCustomizado
 import com.william.novaChavePix.ChavePixRepository
+import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import io.micronaut.validation.Validated
 import org.slf4j.LoggerFactory
@@ -25,6 +25,7 @@ class ConsultaService(
     ): ConsultaChavePixResponse? {
 
 
+        LOGGER.info("[SERVICE] definindo request -> ${request}")
         /**
          * Abordagem 1
          * retorna Pix Id e Cliente ID
@@ -32,6 +33,7 @@ class ConsultaService(
          * Não encontrada, retorna NOT_FOUND
          */
         // CASE 1-> Pesquisa somente por PixIdRequest, DEVE RETORNAR CHAVE PIX nem CLIENTE ID
+
         if (request is PixIdRequest) {
             LOGGER.info("[SERVICE]  PixIdRequest -> pesquisando no banco de dados")
             // verifica se a chave de fato pertence ao Cliente
@@ -40,9 +42,16 @@ class ConsultaService(
                     valorChave = request.pixId,
                     idCLiente = request.clienteId
                 )
-            ) throw StatusNotFound(("Essa chave nao pertence a esse cliente")       )
-                .also { LOGGER.info("[SERVICE]  Nao foi encontrado no banco") }
-            //  TODO("Inserir o handler para captura o erro")
+            ) {
+                responseObserver!!.onError(
+                    Status.NOT_FOUND
+                        .withDescription("Nao encontrado no banco")
+                        .asRuntimeException()
+                )
+                throw StatusNotFound("Nao foi encontrado no banco") //  TODO("Inserir o handler para captura o erro")
+
+            }
+
 
 
             LOGGER.info("[SERVICE] Antes de exibir preciso verificar existencia no BCB")
@@ -56,7 +65,13 @@ class ConsultaService(
             //  200  faz o return com  objeto Stream e finaliza,
             //  404  não retorna e lança erro pois nao foi localizado
             when (response.status.code) {
-                404 -> throw ErroCustomizado("A chave nao foi localizada no BCB")
+                404 -> responseObserver!!.onError( // throw ErroCustomizado("A chave nao foi localizada no BCB")
+                    Status.NOT_FOUND
+                        .withDescription("Nao encontrado no banco")
+                        .asRuntimeException()
+                )
+                    .also { throw StatusNotFound("A chave nao foi localizada no BCB") } //  TODO("Inserir o handler para captura o erro")
+
                 200 -> return response.body().comPixIdRequest(request).toStream()
             }
         }
@@ -70,22 +85,34 @@ class ConsultaService(
             if (byValorChave.size == 1) {
                 val chavePix = byValorChave[0]
                 LOGGER.info("[ChaveRequest] RECEBEU OBJETO DO BANCO, sem passar pelo BCB")
-                //converte em Stream
+
+                //converte em Stream e retorno por End Point para ser enviado pro cliente
                 return chavePix.toStream()
 
             } else {
                 LOGGER.info("[ChaveRequest] Não achou no banco, vai procurar no BCB")
-                val response = bcbClient.consultaChavePix(request.chave)
-                LOGGER.info("[ChaveRequest] RECEBEU OBJETO DO bcbClient")
-                println(response.body())
 
+                val response = bcbClient.consultaChavePix(request.chave)
+
+
+                LOGGER.info("[ChaveRequest] Recebeu objeto do do bcbClient: ${response.status.code}")
 
                 when (response.status.code) {
-                    404 -> throw StatusNotFound("A chave nao foi localizada no BCB")
+                    404 -> retornaErro(responseObserver, Status.NOT_FOUND, "Sem retorno do BCB")
                     200 -> return response.body().toStream()    //converte em Stream
                 }
             }
         }
+
+
         return null
     }
+
+
+}
+
+fun retornaErro(on: StreamObserver<ConsultaChavePixResponse>?, status: Status, mensagem: String) {
+    return on!!.onError(
+        status.withDescription(mensagem).asRuntimeException()
+    )
 }
