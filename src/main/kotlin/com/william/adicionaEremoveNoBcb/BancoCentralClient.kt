@@ -1,15 +1,14 @@
 package com.william.adicionaEremoveNoBcb
 
+import com.william.ConsultaChavePixResponse
 import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbRequest
 import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbResponse
 import com.william.adicionaEremoveNoBcb.entidades.DeletePixKeyRequest
 import com.william.bcbClient.DeletePixKeyResponse
+import com.william.consultaChavePix.ConsultaChavePixResponseDTO
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Body
-import io.micronaut.http.annotation.Delete
-import io.micronaut.http.annotation.PathVariable
-import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.*
 import io.micronaut.http.client.annotation.Client
 import javax.validation.constraints.NotBlank
 
@@ -32,10 +31,10 @@ interface BancoCentralClient {
     )
     fun removeChavePix(@PathVariable key: String, @Body body: DeletePixKeyRequest): HttpResponse<DeletePixKeyResponse>
 
-    @Post(
-        "/api/v1/pix/keys",
+    @Get(
+        "/api/v1/pix/keys/{key}",
         consumes = [MediaType.APPLICATION_XML],
         processes = [MediaType.APPLICATION_XML]
     )
-    fun consultaChavePix(@PathVariable @NotBlank chave: String): HttpResponse<Map<String, Any>>
+    fun consultaChavePix(@PathVariable @NotBlank key: String): HttpResponse<ConsultaChavePixResponseDTO>
 }

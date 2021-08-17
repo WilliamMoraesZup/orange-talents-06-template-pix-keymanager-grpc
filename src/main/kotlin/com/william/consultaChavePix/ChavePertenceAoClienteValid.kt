@@ -34,7 +34,7 @@ class ChavePertenceAoClienteValidator : ConstraintValidator<ValidPertenceAoClien
     ): Boolean {
 
         // preciso voltar para validar aqui depois e eliminar o pertence ao cliente
-        println("Vaidans")
+
         println(value!!)
 
 

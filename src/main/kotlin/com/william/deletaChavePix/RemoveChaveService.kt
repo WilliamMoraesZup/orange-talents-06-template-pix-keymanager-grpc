@@ -3,8 +3,8 @@ package com.william.deletaChavePix
 import com.william.EmptyReturn
 import com.william.adicionaEremoveNoBcb.BancoCentralClient
 import com.william.adicionaEremoveNoBcb.entidades.DeletePixKeyRequest
-import com.william.adicionaEremoveNoBcb.entidades.IsbbCodigo
-import com.william.exceptions.ChaveNaoEncontradaNoSistema
+import com.william.adicionaEremoveNoBcb.entidades.IsbpCodigo
+import com.william.exceptions.StatusNotFound
 import com.william.novaChavePix.ChavePixRepository
 import com.william.novaChavePix.ItauClient
 import io.grpc.stub.StreamObserver
@@ -33,7 +33,7 @@ class RemoveChaveService(
         LOGGER.info("[RemoveChaveService] Passei da validação")
 
         if (!repository.existsByValorChave(requestDTO.chavePix!!)) LOGGER.warn("Chave Pix nao encontrada")
-            .also { throw ChaveNaoEncontradaNoSistema("Chave Pix nao encontrada") }
+            .also { throw StatusNotFound("Chave Pix nao encontrada") }
 
 
         LOGGER.info("[RemoveChaveService] Buscando o cliente no sistema do ITAU")
@@ -42,7 +42,7 @@ class RemoveChaveService(
         LOGGER.info("[RemoveChaveService] Resultado da consulta no ITAU= ${consultaUsuario.status}")
 
         if (consultaUsuario.code() == 404) LOGGER.warn("Usuario nao encontrado no Itau")
-            .also { throw ChaveNaoEncontradaNoSistema("Usuario nao encontrado no Itauo") }
+            .also { throw StatusNotFound("Usuario nao encontrado no Itauo") }
 
 
         LOGGER.info("[RemoveChaveService] Verificando se a chavePix e Cliente ID coincidem no banco local")
@@ -53,7 +53,7 @@ class RemoveChaveService(
             val clienteBuscado = repository.findByIdCliente(requestDTO.clienteId)
 
 
-            val isbp = IsbbCodigo(clienteBuscado.get().conta.instituicao).isbp
+            val isbp = IsbpCodigo(clienteBuscado.get().conta.instituicao).retornoInstituicao
             val chavePix = requestDTO.chavePix
             val deletePixKeyRequest = DeletePixKeyRequest(chavePix, isbp)
 
@@ -71,7 +71,7 @@ class RemoveChaveService(
             }
 
             if (chaveDeletada.status.equals(HttpStatus.NOT_FOUND)) LOGGER.warn("[REMOVE_ENDPOINT] Chave nao encontrada no BCB")
-                .also { ChaveNaoEncontradaNoSistema("Chave nao encontrada no BCB") }
+                .also { StatusNotFound("Chave nao encontrada no BCB") }
 
 
             responseObserver.onNext(EmptyReturn.newBuilder().build())

@@ -14,10 +14,11 @@ class ExceptionInterceptor : MethodInterceptor<BindableService, Any?> {
     override fun intercept(context: MethodInvocationContext<BindableService, Any?>?): Any? {
 
         //context traz o contexto do metodo chamado, no endpoint: void registra(CadastraChavePixRequest request,StreamObserver responseObserver)
-        val responseObserver = context!!.parameterValues[1] as StreamObserver<*>
 
+        val responseObserver = context!!.parameterValues[1] as StreamObserver<*>
+        println(responseObserver)
         try {
-            return context?.proceed()
+            return context.proceed()
         } catch (e: HttpClientException) {
             return responseObserver.onError(
                 Status.INTERNAL
@@ -34,23 +35,26 @@ class ExceptionInterceptor : MethodInterceptor<BindableService, Any?> {
                     .withDescription(e.message)
                     .asRuntimeException()
             )
-        } catch (e: ChaveJaExisteSistema) {
+        } catch (e: StatusAlreadyExists) {
 
             return responseObserver.onError(
                 Status.ALREADY_EXISTS
-                    .withDescription("Essa chave já está cadastrada")
+                    .withDescription(e.message)
                     .asRuntimeException()
             )
-
+        } catch (e: StatusNotFound) {
+            return responseObserver.onError(
+                Status.NOT_FOUND
+                    .withDescription(e.message)
+                    .asRuntimeException()
+            )
         } catch (e: ConstraintViolationException) {
-
             return responseObserver.onError(
                 Status.INVALID_ARGUMENT
                     .withDescription(e.message)
                     .asRuntimeException()
             )
-
         }
-    }
 
+    }
 }

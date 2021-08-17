@@ -26,9 +26,3 @@ fun RemoveChavePixRequest.toModel(): RemoveChaveRequestDTO {
     return RemoveChaveRequestDTO(pixId, clienteId)
 
 }
-
-fun ConsultaChavePixRequest.toModel(): ConsultaChavePixRequestInterface {
-    if (this.hasChave()) return ChaveRequest(chave)
-    if (this.hasPixIdRequest()) return PixIdRequest(pixIdRequest.clienteId, pixIdRequest.clienteId)
-    else throw IllegalStateException("erro ao receber os dados do request")
-}

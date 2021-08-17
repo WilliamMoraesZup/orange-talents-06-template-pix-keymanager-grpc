@@ -1,13 +1,12 @@
 package com.william.exceptions
 
-class ParametrosInvalidos(message: String) : Exception(message)
+class ParametrosInvalidos(message: String) : RuntimeException(message)
 
-class ChaveJaExisteSistema(message: String) : Exception(message)
+class StatusAlreadyExists(message: String) : RuntimeException(message)
 
-class ChaveNaoEncontradaNoSistema(message: String) : Exception(message)
+class StatusNotFound(message: String) : RuntimeException(message)
 
-class ClienteNotFound(message: String) : Exception(message)
-
-class ErroChaveJaExisteBCB(message: String) : Exception(message)
+class ErroChaveJaExisteBCB(message: String) : RuntimeException(message)
 
 class ErroCustomizado(mensagem: String) : RuntimeException(mensagem)
+

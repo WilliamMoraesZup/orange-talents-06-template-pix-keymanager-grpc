@@ -1,6 +1,6 @@
 package com.william.deletaChavePix
 
-import com.william.exceptions.ChaveNaoEncontradaNoSistema
+import com.william.exceptions.StatusNotFound
 import com.william.novaChavePix.ChavePixRepository
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
@@ -42,7 +42,7 @@ class ExistsPixIdValidator(
             return true
         } else
         //Preciso de um ERROR handler para retornar  um Status runtime
-            throw ChaveNaoEncontradaNoSistema("Chave Pix nao encontrada no sistema!!")
+            throw StatusNotFound("Chave Pix nao encontrada no sistema!!")
 
     }
 

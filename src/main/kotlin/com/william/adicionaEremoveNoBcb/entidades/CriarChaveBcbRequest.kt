@@ -26,7 +26,7 @@ class CriarChaveBcbRequest(chavePix: ChavePix) {
 
 class BankAccountRequest(chavePix: ChavePix) {
 
-    val participant: String = IsbbCodigo(chavePix.conta.instituicao).isbp
+    val participant: String = IsbpCodigo(chavePix.conta.instituicao).retornoInstituicao
     val branch: String = chavePix.conta.agencia
     val accountNumber: String = chavePix.conta.numeroDaConta
     val accountType: AccountType = when (chavePix.tipoDaConta.name) {

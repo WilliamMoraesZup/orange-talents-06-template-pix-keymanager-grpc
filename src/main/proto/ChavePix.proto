@@ -1,7 +1,10 @@
 syntax = "proto3";
+
 option java_multiple_files = true;
 option java_package = "com.william";
 option java_outer_classname = "ChavePixOuterClassName";
+
+
 package com.william;
 
 service ChavePixServiceRegistra {
@@ -65,11 +68,27 @@ message ConsultaChavePixRequest{
 }
 
 message ConsultaChavePixResponse{
-  message ChavePix{
-    message ContaInfo{
-      TipoDaConta tipoDaConta = 1;
-      string instituicao =2 ;
-
-    }
-  }
+  TipoDaChave tipoChave = 1;
+  string valorChave = 2;
+  DadosConta dadosConta = 3;
+  DadosPessoais dadosPessoais = 4;
+  string criadoEm = 5;
+  string idCliente = 6;
+  string pixId = 7;
 }
+
+
+message DadosConta{
+  string nomeInstituicao = 1;
+  string agencia = 2;
+  string numeroConta = 3;
+  TipoDaConta tipoConta = 4;
+
+}
+
+message DadosPessoais{
+  string nome = 1;
+  string cpf = 2 ;
+
+}
+
