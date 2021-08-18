@@ -1,6 +1,5 @@
 package com.william.novaChavePix.entidades
 
-import com.william.TipoDaChave
 import com.william.TipoDaConta
 import com.william.novaChavePix.TipoDaChaveENUM
 import com.william.novaChavePix.ValidTipoChave
