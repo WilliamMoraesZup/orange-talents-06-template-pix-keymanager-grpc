@@ -11,6 +11,7 @@ service ChavePixServiceRegistra {
   rpc registra(CadastraChavePixRequest) returns (CadastraChavePixResponse) {}
 
 }
+
 service ChavePixServiceRemove {
   rpc remove(RemoveChavePixRequest)returns (EmptyReturn) {}
 
@@ -19,6 +20,11 @@ service ChavePixServiceRemove {
 service  ChavePixServiceConsulta {
   rpc consulta(ConsultaChavePixRequest) returns (ConsultaChavePixResponse) {}
 }
+
+service  ChavePixServiceListaChavesCliente {
+  rpc listaChavesCliente(ListaChavesClienteRequest) returns (ListaChavesClienteResponse) {}
+}
+
 
 enum TipoDaChave {
   UNKNOWN_TIPO_CHAVE = 0;
@@ -92,3 +98,21 @@ message DadosPessoais{
 
 }
 
+message ListaChavesClienteRequest{
+  string clienteId = 1;
+
+}
+
+message ListaChavesClienteResponse{
+  string clienteId  = 1;
+  repeated ChaveClienteLista listaChaves = 2;
+
+  message ChaveClienteLista {
+    string pixId = 1;
+    TipoDaChave tipoDaChave = 2;
+    string valorChave = 3;
+    TipoDaConta tipoDaConta = 4;
+    string dataCriacao = 5;
+
+  }
+}

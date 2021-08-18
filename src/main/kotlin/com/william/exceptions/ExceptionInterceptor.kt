@@ -15,15 +15,11 @@ class ExceptionInterceptor : MethodInterceptor<BindableService, Any?> {
 
         //context traz o contexto do metodo chamado, no endpoint: void registra(CadastraChavePixRequest request,StreamObserver responseObserver)
 
-        println("AS LISTA ${context!!.parameterValues[0]}")
 
-        println("AS LISTA ${context!!.parameterValues[0] is StreamObserver<*>}")
-        println("to string ${context.toString()}")
-        println("argumetnos names ${context.argumentNames.toString()}}")
+        val responseObserver =
+            if (context!!.parameterValues[1] is StreamObserver<*>) context!!.parameterValues[1] as StreamObserver<*>
+            else context!!.parameterValues[0] as StreamObserver<*>
 
-        val responseObserver = context!!.parameterValues[1] as StreamObserver<*>
-
-        println(responseObserver)
         try {
             return context.proceed()
         } catch (e: HttpClientException) {

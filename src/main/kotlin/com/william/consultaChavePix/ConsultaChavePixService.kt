@@ -111,8 +111,8 @@ class ConsultaService(
 
 }
 
-fun retornaErro(on: StreamObserver<ConsultaChavePixResponse>?, status: Status, mensagem: String) {
-    return on!!.onError(
+fun retornaErro(response: StreamObserver<ConsultaChavePixResponse>?, status: Status, mensagem: String) {
+    return response!!.onError(
         status.withDescription(mensagem).asRuntimeException()
     )
 }

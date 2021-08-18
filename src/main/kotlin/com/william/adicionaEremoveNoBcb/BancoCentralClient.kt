@@ -1,6 +1,5 @@
 package com.william.adicionaEremoveNoBcb
 
-import com.william.ConsultaChavePixResponse
 import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbRequest
 import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbResponse
 import com.william.adicionaEremoveNoBcb.entidades.DeletePixKeyRequest

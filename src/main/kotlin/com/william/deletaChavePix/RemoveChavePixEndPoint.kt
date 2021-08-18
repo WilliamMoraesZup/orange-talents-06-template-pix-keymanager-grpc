@@ -22,7 +22,7 @@ class RemoveChavePixEndPoint(
 
 
         LOGGER.info("[REMOVE_ENDPOINT] Chamando service.removeChavePix(")
-        val removeChavePix = service.removeChavePix(request.toModel(), responseObserver)
+        service.removeChavePix(request.toModel(), responseObserver)
 
 
 
