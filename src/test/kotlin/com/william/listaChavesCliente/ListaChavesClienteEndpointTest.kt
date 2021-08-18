@@ -14,10 +14,8 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.testcontainers.shaded.org.hamcrest.MatcherAssert.assertThat
 import org.testcontainers.shaded.org.hamcrest.Matchers.containsInAnyOrder
 import java.util.*
@@ -31,10 +29,14 @@ internal class ListaChavesClienteEndpointTest(
 ) {
 
     @BeforeEach
-    fun start() {
+    fun setup() {
         repository.save(createChavePix(TipoDaChaveENUM.CPF, "41911390880"))
         repository.save(createChavePix(TipoDaChaveENUM.CHAVE_ALEATORIA, "6a05b5bb-5f34-4a91-b282-b748304eb001"))
+    }
 
+    @AfterEach
+    fun cleanUp() {
+        repository.deleteAll()
     }
 
     @Test
@@ -76,7 +78,7 @@ internal class ListaChavesClienteEndpointTest(
         }
         val respostaNull = assertThrows<StatusRuntimeException> {
             grpcClient.listaChavesCliente(
-             null
+                null
             )
         }
         assertEquals(Status.INVALID_ARGUMENT.code, respostaBlank.status.code)
