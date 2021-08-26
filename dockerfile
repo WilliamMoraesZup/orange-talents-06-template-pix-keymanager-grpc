@@ -6,5 +6,5 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 EXPOSE 50051
 
 ENV APP_NAME keymanager-grpc
-
+ENV DB_URL jdbc:postgresql://host.docker.internal/keymanager
 

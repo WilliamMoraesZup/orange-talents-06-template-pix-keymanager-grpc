@@ -10,15 +10,15 @@ endereco.client.bcb: ${BCB_URL:`http://localhost:8082`}
 
 # mensagem erro
 erro.valor.chave.ja.existe: "Essa chave já foi cadatrada"
-erro.cliente.nao.existe:  "O cliente nao foi encontrado no sistema do ITAU"
+erro.cliente.nao.existe: "O cliente nao foi encontrado no sistema do ITAU"
 
 
 datasources:
   default:
-    url: ${DB_URL:`jdbc:postgresql://localhost:5432/keymanager`}
+    url: ${DB_URL:`jdbc:postgresql://192.168.0.9:5432/keymanager`}
     driverClassName: org.postgresql.Driver
-    username: ${DB_URL::postgres}
-    password: ${DB_URL::123456}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:123456}
     schema-generate: CREATE_DROP
     dialect: POSTGRES
 
