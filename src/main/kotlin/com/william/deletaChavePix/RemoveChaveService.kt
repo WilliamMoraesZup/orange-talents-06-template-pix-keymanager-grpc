@@ -71,9 +71,9 @@ class RemoveChaveService(
             }
 
             if (chaveDeletada.status.equals(HttpStatus.NOT_FOUND)) LOGGER.warn("[REMOVE_ENDPOINT] Chave nao encontrada no BCB")
-                .also { StatusNotFound("Chave nao encontrada no BCB") }
+                .also { throw StatusNotFound("Chave nao encontrada no BCB") }
 
-
+            println("DEBUG HERE ")
             responseObserver.onNext(EmptyReturn.newBuilder().build())
 
         }

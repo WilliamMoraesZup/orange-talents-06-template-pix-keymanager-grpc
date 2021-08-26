@@ -37,19 +37,19 @@ enum class TipoDaChaveENUM {
 
     },
 
-    EMAIL {
-        override fun valida(chave: String?): Boolean {
+    EMAIL {  override fun valida(chave: String?): Boolean {
 
-            if (chave.isNullOrBlank()) {
+        if (chave.isNullOrBlank()) {
 
-                return false
-            }
-
-            return EmailValidator().run {
-                initialize(null)
-                isValid(chave, null)
-            }
+            return false
         }
+
+        return EmailValidator().run {
+            initialize(null)
+            isValid(chave, null)
+        }
+    }
+
 
 
     };

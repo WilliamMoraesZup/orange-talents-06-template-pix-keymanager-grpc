@@ -3,10 +3,10 @@ package com.william.novaChavePix
 import com.william.CadastraChavePixResponse
 import com.william.adicionaEremoveNoBcb.BancoCentralClient
 import com.william.adicionaEremoveNoBcb.entidades.CriarChaveBcbRequest
-import com.william.exceptions.StatusAlreadyExists
-import com.william.exceptions.StatusNotFound
 import com.william.exceptions.ErroChaveJaExisteBCB
 import com.william.exceptions.ErroCustomizado
+import com.william.exceptions.StatusAlreadyExists
+import com.william.exceptions.StatusNotFound
 import com.william.novaChavePix.entidades.ChavePix
 import com.william.novaChavePix.entidades.NovaChavePixRequest
 import io.grpc.stub.StreamObserver
@@ -67,6 +67,8 @@ class NovaChavePixService(
 
         LOGGER.info("[SERVICE] CONFERINDO SE A CHAVE JÀ EXISTE NO BCB...")
         val registraChavePix = bancoCentralClient.registraChavePix(CriarChaveBcbRequest(chavePixCriada!!))
+        LOGGER.warn("ERRO ??? ${registraChavePix.body()}")
+
 
         if (registraChavePix.status.equals(HttpStatus.UNPROCESSABLE_ENTITY))
             throw ErroChaveJaExisteBCB(" Essa chave já está cadatrada no sistema do BCB  ")
@@ -78,7 +80,9 @@ class NovaChavePixService(
         }
 
         chavePixCriada.atualizaHorarioChaveAleatoria(registraChavePix.body())
+
         repository.save(chavePixCriada)
+
         LOGGER.info("Chave pix salva no banco com sucesso $chavePixCriada, retornado a chave pro END POINT ")
 
         return chavePixCriada

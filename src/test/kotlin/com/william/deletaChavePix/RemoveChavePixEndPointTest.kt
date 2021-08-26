@@ -7,8 +7,8 @@ import com.william.RemoveChavePixRequest
 import com.william.TipoDaConta
 import com.william.adicionaEremoveNoBcb.BancoCentralClient
 import com.william.adicionaEremoveNoBcb.entidades.DeletePixKeyRequest
+import com.william.novaChavePix.AuxiliaNovaChavePix
 import com.william.novaChavePix.ChavePixRepository
-import com.william.novaChavePix.ItauClient
 import com.william.novaChavePix.TipoDaChaveENUM
 import com.william.novaChavePix.entidades.ChavePix
 import com.william.novaChavePix.entidades.ContaAssociada
@@ -33,10 +33,10 @@ import javax.inject.Singleton
 internal class RemoveChavePixEndPointTest(
     val grpcClient: ChavePixServiceRemoveGrpc.ChavePixServiceRemoveBlockingStub,
     val repository: ChavePixRepository,
-    val itauClient: ItauClient,
+    //  val itauClient: ItauClient,
     val clientBcb: BancoCentralClient
 
-) {
+) : AuxiliaNovaChavePix() {
     lateinit var chavePixSalva: ChavePix
 
     @MockBean(BancoCentralClient::class)
@@ -44,10 +44,6 @@ internal class RemoveChavePixEndPointTest(
         return Mockito.mock(BancoCentralClient::class.java)
     }
 
-//    @MockBean(ItauClient::class)
-//    fun itauClientMock(): ItauClient {
-//        return Mockito.mock(ItauClient::class.java)
-//    }
 
     fun createChavePix(): ChavePix {
         return ChavePix(
